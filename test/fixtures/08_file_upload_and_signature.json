@@ -1,0 +1,33 @@
+{
+  "display": "form",
+  "title": "Document Upload and Sign",
+  "name": "uploadAndSign",
+  "components": [
+    {
+      "type": "file",
+      "key": "attachments",
+      "label": "Document Attachments",
+      "storage": "mock",
+      "multiple": true,
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "signature",
+      "key": "signature",
+      "label": "Signature",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textfield",
+      "key": "signerName",
+      "label": "Signer Full Name",
+      "validate": {
+        "required": true
+      }
+    }
+  ]
+}

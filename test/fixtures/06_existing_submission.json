@@ -1,0 +1,42 @@
+{
+  "display": "form",
+  "title": "Edit Existing Profile",
+  "name": "editProfile",
+  "components": [
+    {
+      "type": "textfield",
+      "key": "username",
+      "label": "Username",
+      "defaultValue": "default_user",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "select",
+      "key": "role",
+      "label": "Role",
+      "defaultValue": "viewer",
+      "dataSrc": "values",
+      "data": {
+        "values": [
+          { "label": "Viewer", "value": "viewer" },
+          { "label": "Editor", "value": "editor" },
+          { "label": "Administrator", "value": "admin" }
+        ]
+      }
+    },
+    {
+      "type": "checkbox",
+      "key": "active",
+      "label": "Active Status",
+      "defaultValue": false
+    },
+    {
+      "type": "textfield",
+      "key": "bio",
+      "label": "Biography",
+      "defaultValue": "No bio entered yet."
+    }
+  ]
+}

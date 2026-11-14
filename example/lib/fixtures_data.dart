@@ -1,0 +1,2219 @@
+/// Bundled representative Form.io JSON schemas for the example application.
+class ExampleFixtures {
+  static const Map<String, String> all = {
+    '01_basic_registration': basicRegistration,
+    '02_conditional_wizard': conditionalWizard,
+    '03_nested_and_repeating': nestedAndRepeating,
+    '04_calculated_totals': calculatedTotals,
+    '05_dependent_dropdowns': dependentDropdowns,
+    '06_existing_submission': existingSubmission,
+    '07_unsupported_and_cyclic': unsupportedAndCyclic,
+    '08_file_upload_and_signature': fileUploadAndSignature,
+    '09_delivrance_attestation_butodra': delivranceAttestationButodra,
+  };
+
+  static const String basicRegistration = r'''
+{
+  "display": "form",
+  "title": "User Registration",
+  "name": "userRegistration",
+  "components": [
+    {
+      "type": "textfield",
+      "key": "firstName",
+      "label": "First Name",
+      "placeholder": "Enter first name",
+      "validate": {
+        "required": true,
+        "minLength": 2
+      }
+    },
+    {
+      "type": "textfield",
+      "key": "lastName",
+      "label": "Last Name",
+      "placeholder": "Enter last name",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "email",
+      "key": "email",
+      "label": "Email Address",
+      "placeholder": "name@example.com",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "password",
+      "key": "password",
+      "label": "Password",
+      "placeholder": "Enter password",
+      "validate": {
+        "required": true,
+        "minLength": 6
+      }
+    },
+    {
+      "type": "phoneNumber",
+      "key": "phone",
+      "label": "Phone Number",
+      "placeholder": "+1 555-0199"
+    },
+    {
+      "type": "checkbox",
+      "key": "terms",
+      "label": "I agree to the Terms of Service",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "button",
+      "key": "submit",
+      "label": "Register",
+      "action": "submit"
+    }
+  ]
+}
+
+''';
+
+  static const String conditionalWizard = r'''
+{
+  "display": "wizard",
+  "title": "Application Wizard",
+  "name": "applicationWizard",
+  "components": [
+    {
+      "type": "panel",
+      "key": "page1",
+      "title": "Personal Details",
+      "components": [
+        {
+          "type": "textfield",
+          "key": "fullName",
+          "label": "Full Name",
+          "validate": {
+            "required": true
+          }
+        },
+        {
+          "type": "checkbox",
+          "key": "hasSpouse",
+          "label": "Do you have a spouse?"
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "key": "page2",
+      "title": "Spouse Details",
+      "conditional": {
+        "show": true,
+        "when": "hasSpouse",
+        "eq": "true"
+      },
+      "components": [
+        {
+          "type": "textfield",
+          "key": "spouseName",
+          "label": "Spouse Name",
+          "validate": {
+            "required": true
+          }
+        },
+        {
+          "type": "textfield",
+          "key": "spouseOccupation",
+          "label": "Spouse Occupation"
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "key": "page3",
+      "title": "Confirmation",
+      "components": [
+        {
+          "type": "textarea",
+          "key": "notes",
+          "label": "Additional Notes"
+        },
+        {
+          "type": "checkbox",
+          "key": "confirm",
+          "label": "Confirm Application",
+          "validate": {
+            "required": true
+          }
+        }
+      ]
+    }
+  ]
+}
+
+''';
+
+  static const String nestedAndRepeating = r'''
+{
+  "display": "form",
+  "title": "Organization Hierarchy",
+  "name": "orgHierarchy",
+  "components": [
+    {
+      "type": "container",
+      "key": "contactInfo",
+      "label": "Contact Information",
+      "components": [
+        {
+          "type": "textfield",
+          "key": "city",
+          "label": "City"
+        },
+        {
+          "type": "textfield",
+          "key": "postalCode",
+          "label": "Postal Code"
+        }
+      ]
+    },
+    {
+      "type": "datagrid",
+      "key": "employees",
+      "label": "Employees",
+      "validate": {
+        "minRows": 1,
+        "maxRows": 5
+      },
+      "components": [
+        {
+          "type": "textfield",
+          "key": "name",
+          "label": "Employee Name",
+          "defaultValue": "New Employee",
+          "validate": {
+            "required": true
+          }
+        },
+        {
+          "type": "number",
+          "key": "age",
+          "label": "Age",
+          "defaultValue": 25
+        },
+        {
+          "type": "textfield",
+          "key": "role",
+          "label": "Role"
+        }
+      ]
+    },
+    {
+      "type": "editgrid",
+      "key": "assets",
+      "label": "Assets",
+      "components": [
+        {
+          "type": "textfield",
+          "key": "assetName",
+          "label": "Asset Name"
+        },
+        {
+          "type": "number",
+          "key": "value",
+          "label": "Value"
+        }
+      ]
+    }
+  ]
+}
+
+''';
+
+  static const String calculatedTotals = r'''
+{
+  "display": "form",
+  "title": "Invoice Calculation",
+  "name": "invoiceCalculation",
+  "components": [
+    {
+      "type": "datagrid",
+      "key": "items",
+      "label": "Invoice Items",
+      "components": [
+        {
+          "type": "textfield",
+          "key": "description",
+          "label": "Description"
+        },
+        {
+          "type": "number",
+          "key": "quantity",
+          "label": "Quantity",
+          "defaultValue": 1
+        },
+        {
+          "type": "number",
+          "key": "unitPrice",
+          "label": "Unit Price",
+          "defaultValue": 10
+        },
+        {
+          "type": "number",
+          "key": "lineTotal",
+          "label": "Line Total",
+          "calculateValue": {
+            "*": [
+              { "var": "row.quantity" },
+              { "var": "row.unitPrice" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "number",
+      "key": "discount",
+      "label": "Discount",
+      "defaultValue": 5
+    },
+    {
+      "type": "number",
+      "key": "shipping",
+      "label": "Shipping Fee",
+      "defaultValue": 15
+    },
+    {
+      "type": "number",
+      "key": "finalTotal",
+      "label": "Final Total",
+      "calculateValue": {
+        "-": [
+          { "+": [{ "var": "data.shipping" }, 100] },
+          { "var": "data.discount" }
+        ]
+      }
+    }
+  ]
+}
+
+''';
+
+  static const String dependentDropdowns = r'''
+{
+  "display": "form",
+  "title": "Dependent Locations",
+  "name": "dependentLocations",
+  "components": [
+    {
+      "type": "select",
+      "key": "country",
+      "label": "Country",
+      "dataSrc": "values",
+      "data": {
+        "values": [
+          { "label": "United States", "value": "us" },
+          { "label": "Canada", "value": "ca" },
+          { "label": "France", "value": "fr" }
+        ]
+      },
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "select",
+      "key": "city",
+      "label": "City",
+      "dataSrc": "url",
+      "data": {
+        "url": "/api/cities"
+      },
+      "valueProperty": "id",
+      "template": "<span>{{ item.label }}</span>",
+      "validate": {
+        "required": true
+      }
+    }
+  ]
+}
+
+''';
+
+  static const String existingSubmission = r'''
+{
+  "display": "form",
+  "title": "Edit Existing Profile",
+  "name": "editProfile",
+  "components": [
+    {
+      "type": "textfield",
+      "key": "username",
+      "label": "Username",
+      "defaultValue": "default_user",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "select",
+      "key": "role",
+      "label": "Role",
+      "defaultValue": "viewer",
+      "dataSrc": "values",
+      "data": {
+        "values": [
+          { "label": "Viewer", "value": "viewer" },
+          { "label": "Editor", "value": "editor" },
+          { "label": "Administrator", "value": "admin" }
+        ]
+      }
+    },
+    {
+      "type": "checkbox",
+      "key": "active",
+      "label": "Active Status",
+      "defaultValue": false
+    },
+    {
+      "type": "textfield",
+      "key": "bio",
+      "label": "Biography",
+      "defaultValue": "No bio entered yet."
+    }
+  ]
+}
+
+''';
+
+  static const String unsupportedAndCyclic = r'''
+{
+  "display": "form",
+  "title": "Cyclic and Unsupported Features",
+  "name": "cyclicAndUnsupported",
+  "components": [
+    {
+      "type": "textfield",
+      "key": "fieldA",
+      "label": "Field A",
+      "logic": [
+        {
+          "name": "Depend On B",
+          "trigger": {
+            "type": "simple",
+            "simple": {
+              "when": "fieldB",
+              "eq": "trigger"
+            }
+          },
+          "actions": [
+            {
+              "name": "Set Value A",
+              "type": "value",
+              "value": "updated_from_b"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "textfield",
+      "key": "fieldB",
+      "label": "Field B",
+      "logic": [
+        {
+          "name": "Depend On A",
+          "trigger": {
+            "type": "simple",
+            "simple": {
+              "when": "fieldA",
+              "eq": "updated_from_b"
+            }
+          },
+          "actions": [
+            {
+              "name": "Set Value B",
+              "type": "value",
+              "value": "trigger"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "unknown_future_component",
+      "key": "unsupportedRequiredField",
+      "label": "Special Plugin Field",
+      "validate": {
+        "required": true
+      }
+    }
+  ]
+}
+
+''';
+
+  static const String fileUploadAndSignature = r'''
+{
+  "display": "form",
+  "title": "Document Upload and Sign",
+  "name": "uploadAndSign",
+  "components": [
+    {
+      "type": "file",
+      "key": "attachments",
+      "label": "Document Attachments",
+      "storage": "mock",
+      "multiple": true,
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "signature",
+      "key": "signature",
+      "label": "Signature",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textfield",
+      "key": "signerName",
+      "label": "Signer Full Name",
+      "validate": {
+        "required": true
+      }
+    }
+  ]
+}
+
+''';
+
+  static const String delivranceAttestationButodra = r'''
+{
+  "title": "Délivrance de l'attestation de membre BUTODRA",
+  "name": "delivranceAttestationMembreButodra",
+  "path": "delivrance-attestation-membre-butodra",
+  "type": "form",
+  "display": "wizard",
+  "tags": [
+    "pdaap",
+    "xportal",
+    "butodra"
+  ],
+  "components": [
+    {
+      "type": "panel",
+      "key": "stepIntro",
+      "title": "stepIntro.title",
+      "label": "stepIntro.title",
+      "breadcrumbClickable": true,
+      "buttonSettings": {
+        "previous": true,
+        "cancel": true,
+        "next": true
+      },
+      "navigateOnEnter": false,
+      "saveOnEnter": false,
+      "scrollToTop": false,
+      "collapsible": false,
+      "input": false,
+      "tableView": false,
+      "components": [
+        {
+          "type": "columns",
+          "key": "mainLayout",
+          "input": false,
+          "tableView": false,
+          "columns": [
+            {
+              "width": 12,
+              "offset": 0,
+              "push": 0,
+              "pull": 0,
+              "size": "md",
+              "components": [
+                {
+                  "type": "htmlelement",
+                  "key": "htmlInfoboxDescription",
+                  "tag": "div",
+                  "content": "<style>@media (max-width:768px){.infobox-icon-desc{display:none !important;}}</style><div style=\"display:flex;align-items:flex-start;gap:12px;background:#fbf5df;border-left:5px solid #9a8b3c;padding:12px 16px;margin-bottom:20px;\"><div class=\"infobox-icon-desc\" style=\"width:26px;height:26px;min-width:26px;border-radius:50%;background:#9a8b3c;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;\">?</div><p style=\"margin:0;font-size:14px;color:#1E2939;line-height:1.5;\">{{ t('htmlInfoboxDescription.text') }}</p></div>",
+                  "input": false,
+                  "tableView": false,
+                  "refreshOnChange": false,
+                  "customConditional": "show = !data.quelTypeDeProcedureSouhaitezVous;"
+                },
+                {
+                  "type": "columns",
+                  "key": "guideRow1",
+                  "input": false,
+                  "tableView": false,
+                  "columns": [
+                    {
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md",
+                      "components": [
+                        {
+                          "type": "radio",
+                          "key": "quelTypeDeProcedureSouhaitezVous",
+                          "label": "quelTypeDeProcedureSouhaitezVous",
+                          "input": true,
+                          "tableView": false,
+                          "inline": true,
+                          "optionsLabelPosition": "right",
+                          "values": [
+                            {
+                              "label": "quelTypeDeProcedureSouhaitezVous.normale",
+                              "value": "normale",
+                              "shortcut": ""
+                            },
+                            {
+                              "label": "quelTypeDeProcedureSouhaitezVous.express",
+                              "value": "express",
+                              "shortcut": ""
+                            }
+                          ],
+                          "validate": {
+                            "required": true
+                          },
+                          "errors": {
+                            "required": "quelTypeDeProcedureSouhaitezVous.error.required"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "width": 6,
+                      "offset": 0,
+                      "push": 0,
+                      "pull": 0,
+                      "size": "md",
+                      "components": []
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "key": "startButton",
+                  "label": "startButton",
+                  "action": "event",
+                  "event": "startRequest",
+                  "theme": "success",
+                  "hidden": true,
+                  "disableOnInvalid": true,
+                  "input": true,
+                  "tableView": false
+                },
+                {
+                  "type": "htmlelement",
+                  "key": "html2",
+                  "tag": "div",
+                  "content": "<div style=\"display:flex; gap:16px; flex-wrap:nowrap; margin-top:20px;\"><div style=\"flex:1; background:#F9FAFB; border-radius:12px; padding:20px 24px; border:1px solid #f0f0f0;\"><img src=\"https://new-service-public.b-cdn.net/images/watch.png\" width=\"32\" height=\"32\" alt=\"{{ t('html2.delai.title') }}\" style=\"display:block; margin-bottom:12px;\"/><h3 style=\"font-size:15px; font-weight:600; color:#111; margin:0 0 4px;\">{{ t('html2.delai.title') }}</h3><p style=\"font-size:14px; color:#555; margin:0;\">{{ data.quelTypeDeProcedureSouhaitezVous === 'express' ? t('html2.delai.valueExpress') : t('html2.delai.valueNormale') }}</p></div><div style=\"flex:1; background:#F9FAFB; border-radius:12px; padding:20px 24px; border:1px solid #f0f0f0;\"><img src=\"https://new-service-public.b-cdn.net/images/coin.png\" width=\"32\" height=\"32\" alt=\"{{ t('html2.cout.title') }}\" style=\"display:block; margin-bottom:12px;\"/><h3 style=\"font-size:15px; font-weight:600; color:#111; margin:0 0 4px;\">{{ t('html2.cout.title') }}</h3><p style=\"font-size:14px; color:#555; margin:0;\">{{ data.quelTypeDeProcedureSouhaitezVous === 'express' ? t('html2.cout.valueExpress') : t('html2.cout.valueNormale') }}</p></div><div style=\"flex:1; background:#F9FAFB; border-radius:12px; padding:20px 24px; border:1px solid #f0f0f0;\"><img src=\"https://new-service-public.b-cdn.net/images/aganda.png\" width=\"32\" height=\"32\" alt=\"{{ t('html2.validite.title') }}\" style=\"display:block; margin-bottom:12px;\"/><h3 style=\"font-size:15px; font-weight:600; color:#111; margin:0 0 4px;\">{{ t('html2.validite.title') }}</h3><p style=\"font-size:14px; color:#555; margin:0;\">{{ t('html2.validite.value') }}</p></div></div>",
+                  "input": false,
+                  "tableView": false,
+                  "refreshOnChange": true,
+                  "attrs": [
+                    {
+                      "attr": "class",
+                      "value": "info-cards-container"
+                    }
+                  ],
+                  "customConditional": "show = !!data.quelTypeDeProcedureSouhaitezVous;"
+                },
+                {
+                  "type": "htmlelement",
+                  "key": "separatorLine",
+                  "tag": "div",
+                  "content": "<div class=\"autredocument-formaio\"><div class=\"autre-line\"></div><style>.autredocument-formaio { display: flex; margin: 20px 0; padding: 0; width: 100%; } .autredocument-formaio .autre-line { flex: 1; height: 1px; background-color: #CBCBCB; }</style></div>",
+                  "input": false,
+                  "tableView": false,
+                  "refreshOnChange": false,
+                  "customConditional": "show = !!data.quelTypeDeProcedureSouhaitezVous;"
+                },
+                {
+                  "type": "htmlelement",
+                  "key": "description",
+                  "tag": "div",
+                  "content": "<div style=\"font-size:22px;font-weight:600;margin-bottom:10px;color:#000;margin-top:20px;\">{{ t('description.title') }}</div><div style=\"font-size:16px;line-height:1.6;color:#333;margin-bottom:30px;\">{{ t('description.text') }}</div><div style=\"font-size:22px;font-weight:600;margin-bottom:10px;color:#000;\">{{ t('description.beneficiaires.title') }}</div><div style=\"font-size:16px;line-height:1.6;color:#333;margin-bottom:30px;\"><ul style=\"list-style: disc !important\"><li>{{ t('description.beneficiaires.item.1') }}</li></ul></div>",
+                  "input": false,
+                  "tableView": false,
+                  "refreshOnChange": false,
+                  "customConditional": "show = !!data.quelTypeDeProcedureSouhaitezVous;"
+                },
+                {
+                  "type": "htmlelement",
+                  "key": "conditions",
+                  "tag": "div",
+                  "content": "<div style=\"background:#F8F8F8;border:1px solid #E5E5E5;border-radius:12px;padding:25px;margin-bottom:25px;\"><div style=\"font-size:20px;font-weight:600;margin-bottom:15px;color:#000;\">{{ t('conditions.title') }}</div><ul style=\"font-size:16px;color:#333;line-height:1.7;padding-left:20px;margin:0;list-style: disc !important\"><li style=\"display: list-item !important;\">{{ t('conditions.item.1') }}</li><li style=\"display: list-item !important;\">{{ t('conditions.item.2') }}</li><li style=\"display: list-item !important;\">{{ t('conditions.item.3') }}</li><li style=\"display: list-item !important;\">{{ t('conditions.item.4') }}</li></ul></div>",
+                  "input": false,
+                  "tableView": false,
+                  "refreshOnChange": false,
+                  "customConditional": "show = !!data.quelTypeDeProcedureSouhaitezVous;"
+                },
+                {
+                  "type": "htmlelement",
+                  "key": "pieces",
+                  "tag": "div",
+                  "content": "<div style=\"background:#F8F8F8;border:1px solid #E5E5E5;border-radius:12px;padding:25px;margin-bottom:25px;\"><div style=\"font-size:20px;font-weight:600;margin-bottom:15px;color:#000;\">{{ t('pieces.title') }}</div><ul style=\"font-size:16px;color:#333;line-height:1.7;padding-left:20px;margin:0;list-style: disc !important\"><li style=\"display: list-item !important;\">{{ t('pieces.item.1') }}</li><li style=\"display: list-item !important;\">{{ t('pieces.item.2') }}</li><li style=\"display: list-item !important;\">{{ t('pieces.item.3') }}</li><li style=\"display: list-item !important;\">{{ t('pieces.item.4') }}</li><li style=\"display: list-item !important;\">{{ t('pieces.item.5') }}</li></ul></div>",
+                  "input": false,
+                  "tableView": false,
+                  "refreshOnChange": false,
+                  "customConditional": "show = !!data.quelTypeDeProcedureSouhaitezVous;"
+                },
+                {
+                  "type": "htmlelement",
+                  "key": "etapes",
+                  "tag": "div",
+                  "content": "<div style=\"font-size:22px;font-weight:600;margin-bottom:20px;color:#000;\">{{ t('etapes.title') }}</div><div style=\"display:flex;align-items:flex-start;margin-bottom:15px;\"><div style=\"width:28px;height:28px;min-width:28px;background:#1BAE4A;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;margin-right:12px;font-size:16px;\">1</div><div style=\"font-size:16px;line-height:1.6;color:#333;\">{{ t('etapes.item.1') }}</div></div><div style=\"display:flex;align-items:flex-start;margin-bottom:15px;\"><div style=\"width:28px;height:28px;min-width:28px;background:#1BAE4A;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;margin-right:12px;font-size:16px;\">2</div><div style=\"font-size:16px;line-height:1.6;color:#333;\">{{ t('etapes.item.2') }}</div></div><div style=\"display:flex;align-items:flex-start;margin-bottom:15px;\"><div style=\"width:28px;height:28px;min-width:28px;background:#1BAE4A;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;margin-right:12px;font-size:16px;\">3</div><div style=\"font-size:16px;line-height:1.6;color:#333;\">{{ t('etapes.item.3') }}</div></div><div style=\"display:flex;align-items:flex-start;margin-bottom:20px;\"><div style=\"width:28px;height:28px;min-width:28px;background:#1BAE4A;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;margin-right:12px;font-size:16px;\">4</div><div style=\"font-size:16px;line-height:1.6;color:#333;\">{{ t('etapes.item.4') }}</div></div>",
+                  "input": false,
+                  "tableView": false,
+                  "refreshOnChange": false,
+                  "customConditional": "show = !!data.quelTypeDeProcedureSouhaitezVous;"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "htmlelement",
+          "key": "stylesCssSidebar",
+          "tag": "style",
+          "content": "/* Carte principale - Sticky */\n.sfc-card {\n  position: sticky;\n  top: 20px;\n  background: #fff;\n  border: 1.5px solid #e5e7eb;\n  border-radius: 14px;\n  padding: 24px;\n  font-family: Poppins, sans-serif;\n}\n/* Titre principal */\n.sfc-card h3 {\n  font-size: 20px;\n  font-weight: 700;\n  color: #111827;\n  margin: 0 0 4px;\n}\n/* Sous-titre */\n.sfc-card .sfc-subtitle {\n  font-size: 14px;\n  color: #000;\n  margin: 0 0 18px;\n  line-height: 1.5;\n}\n/* Ligne d'information */\n.sfc-row {\n  display: flex;\n  align-items: flex-start;\n  gap: 10px;\n  margin-bottom: 10px;\n  font-size: 13.5px;\n  color: #000;\n  line-height: 1.5;\n}\n/* Icône */\n.sfc-row .sfc-ico {\n  flex-shrink: 0;\n  width: 20px;\n  text-align: center;\n  font-size: 15px;\n  margin-top: 1px;\n}\n/* Liens */\n.sfc-row a {\n  color: #1a73e8;\n  text-decoration: none;\n}\n.sfc-row a:hover {\n  text-decoration: underline;\n}\n.sfc-row strong {\n  color: #111827;\n}\n/* Titre section Statistiques */\n.sfc-stitle {\n  font-size: 18px;\n  font-weight: 700;\n  color: #111827;\n  margin: 20px 0 12px;\n  padding-top: 16px;\n  border-top: 1px solid #e5e7eb;\n}\n.sfc-flex-box{\ndisplay:flex;\n \n}\n/* Conteneur boîtes stats */\n.sfc-boxes {\n  display: flex;\n  white-space: normal;\n  gap: 10px;\n  margin-bottom: 14px;\n  width:100%\n}\n/* Boîte stat */\n.sfc-box {\n  flex: 1;\n  background: #f9fafb;\n  border: 1px solid #e5e7eb;\n  border-radius: 10px;\n  padding: 10px;\n}\n/* Label stat */\n.sfc-box .sfc-lbl {\n  font-size: 12px;\n  color: #6b7280;\n  font-weight: 500;\n  margin: 0 0 6px;\n}\n/* Valeur stat */\n.sfc-box .sfc-val {\n  font-size: 12px;\n  font-weight: 600;\n  color: #111827;\n  margin: 0;\n}\n/* Sous-texte stat */\n.sfc-box .sfc-sub {\n  font-size: 11px;\n  color: #9ca3af;\n  font-weight: 400;\n}\n/* Lien voir stats */\n.sfc-link {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n  color: #16a34a;\n  font-size: 13px;\n  font-weight: 600;\n  text-decoration: none;\n  cursor: pointer;\n}\n.sfc-link:hover {\n  text-decoration: underline;\n}\n/* Icône lien */\n.sfc-link-ico {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 18px;\n  height: 18px;\n  background: #16a34a;\n  color: #fff;\n  border-radius: 50%;\n  font-size: 11px;\n  font-weight: 700;\n}\n/* Responsive */\n@media (max-width: 992px) {\n  .sfc-card {\n    position: static;\n    margin-top: 20px;\n  }\n}\n/* ---- GOUTTIERE UNIQUE DU CATALOGUE : 10px ----\n   Meme mecanisme que Bootstrap (.row margin -15 / .col padding 15 = 30px),\n   transpose a 10px : marge -5 et padding 5. La marge negative compense le\n   padding, donc les bords exterieurs de la ligne ne bougent pas : seul l ecart\n   interieur change et chaque champ gagne 10px de largeur.\n   Cette page n embarque pas cf.css : la regle y est recopiee. Le :not(.cf-phone)\n   exclut STRUCTURELLEMENT la boite fusionnee du telephone, dont la gouttiere\n   doit rester a 0, ne pas le retirer. */\n.formio-form .formio-component-columns.row:not(.cf-phone) { margin-left:-5px; margin-right:-5px; }\n.formio-form .formio-component-columns.row:not(.cf-phone) > [class*=col-] { padding-left:5px; padding-right:5px; }",
+          "input": false,
+          "tableView": false,
+          "refreshOnChange": false
+        },
+        {
+          "type": "htmlelement",
+          "key": "stickyInjector",
+          "tag": "div",
+          "content": "",
+          "input": false,
+          "tableView": false,
+          "refreshOnChange": false,
+          "customClass": "d-none",
+          "calculateValue": "if(typeof window.__sfcStickyDone === 'undefined'){window.__sfcStickyDone=false;}function sfcApply(){var el=document.getElementById('sidebarFournisseur');if(!el)return false;var col=el.closest('[class*=\"col-\"]');if(col){col.style.position='sticky';col.style.top='20px';col.style.alignSelf='flex-start';}var row=el.closest('.row');if(row){row.style.alignItems='flex-start';row.style.display='flex';}return true;}if(!window.__sfcStickyDone){if(sfcApply()){window.__sfcStickyDone=true;}else{setTimeout(function(){sfcApply();window.__sfcStickyDone=true;},500);setTimeout(function(){sfcApply();},1500);}}"
+        },
+        {
+          "type": "htmlelement",
+          "key": "responsiveStyles_description",
+          "tag": "style",
+          "content": "/* ===== Responsivite mobile (<=768px) - passeport - visuel uniquement ===== */\n@media (max-width: 768px) {\n  /* 1. Colonnes form.io empilees pleine largeur */\n  .formio-component-columns > .row { display: block !important; margin-left: 0 !important; margin-right: 0 !important; }\n  .formio-component-columns > .row > div[class*=\"col-\"] { width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important; padding-left: 6px !important; padding-right: 6px !important; margin-bottom: 2px !important; }\n  /* 2. Champs pleine largeur + tactile + pas de zoom iOS (16px) */\n  .formio-form .form-control, .formio-form .choices, .formio-form .choices__inner, .formio-form select, .formio-form input:not([type=checkbox]):not([type=radio]), .formio-form textarea { width: 100% !important; max-width: 100% !important; font-size: 16px !important; box-sizing: border-box !important; }\n  .formio-form .form-control, .formio-form .choices__inner, .formio-form select { min-height: 44px !important; }\n  /* 3. Panels / fieldsets / cartes : padding reduit */\n  .formio-form .card-body, .formio-form .panel-body, .formio-form fieldset { padding: 12px !important; }\n  .formio-form .card, .formio-form .panel, .formio-form fieldset { margin-bottom: 12px !important; }\n  /* 4. Titres legerement reduits */\n  .formio-form h1 { font-size: 22px !important; } .formio-form h2 { font-size: 19px !important; } .formio-form h3 { font-size: 16px !important; }\n  /* 5. Cartes info (delai/cout/validite) + stats sidebar empilees */\n  .info-cards-container > div { flex-direction: column !important; flex-wrap: wrap !important; gap: 10px !important; }\n  .sfc-boxes, .sfc-flex-box { flex-direction: column !important; }\n  .sfc-card { position: static !important; margin-top: 16px !important; }\n  /* 6. Navigation wizard : boutons empiles pleine largeur, breadcrumb scrollable */\n  .formio-wizard-nav-container { display: flex !important; flex-wrap: wrap !important; gap: 8px !important; }\n  .formio-wizard-nav-container li { flex: 1 1 auto !important; list-style: none !important; }\n  .formio-wizard-nav-container .btn, .btn-wizard-nav-previous, .btn-wizard-nav-next, .btn-wizard-nav-submit, .btn-wizard-nav-cancel { width: 100% !important; padding: 12px !important; }\n  .pagination { overflow-x: auto !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch !important; }\n  /* 7. Recap : tableau scrollable et lisible */\n  #recapDisplay { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }\n  .formio-form table { width: 100% !important; font-size: 13px !important; }\n  .formio-form table td, .formio-form table th { padding: 6px !important; word-break: break-word !important; }\n  /* 8. Pas de debordement horizontal */\n  .formio-form, .formio-form .wizard-page, .formio-component-panel { overflow-x: hidden !important; }\n  /* 9. Radios inline lisibles */\n  .formio-form .form-check-inline { margin-right: 14px !important; margin-bottom: 4px !important; }\n  /* 10. Cartes info Delai/Cout/Validite (composant html2) : empiler */\n  .formio-component-html2 > div { flex-wrap: wrap !important; gap: 12px !important; }\n  .formio-component-html2 > div > div { flex: 1 1 100% !important; min-width: 0 !important; padding: 16px !important; }\n  /* 11. Blocs HTML bruts : titres et paddings inline reduits */\n  [style*=\"font-size:22px\"] { font-size: 18px !important; }\n  [style*=\"font-size:20px\"] { font-size: 17px !important; }\n  [style*=\"font-size:18px\"] { font-size: 16px !important; }\n  [style*=\"padding:25px\"], [style*=\"padding: 25px\"] { padding: 14px !important; }\n  /* 12. Bouton Faire une demande pleine largeur */\n  .formio-component-startButton .btn, .formio-component-startButton button { width: 100% !important; padding: 12px !important; font-size: 16px !important; }\n  /* 13. Images dans blocs HTML : ne pas deborder */\n  .formio-form img { max-width: 100% !important; height: auto !important; }\n  /* 14. Colonne principale : masquer la sidebar vide */\n  .formio-component-mainLayout > .row > div:empty { display: none !important; }\n  /* 15. Etapes numerotees : garder l alignement, autoriser le retour a la ligne */\n  [style*=\"display:flex;align-items:flex-start\"] { flex-wrap: nowrap !important; }\n  [style*=\"display:flex;align-items:flex-start\"] > div:last-child { min-width: 0 !important; word-break: break-word !important; }\n}\n/* ===== Tres petits ecrans (<=480px) : paddings et titres plus serres ===== */\n@media (max-width: 480px) {\n  [style*=\"padding:25px\"], [style*=\"padding: 25px\"] { padding: 12px !important; }\n  [style*=\"padding:20px 24px\"] { padding: 14px !important; }\n  [style*=\"padding:12px 16px\"] { padding: 10px 12px !important; }\n  [style*=\"font-size:22px\"] { font-size: 17px !important; }\n  [style*=\"font-size:20px\"] { font-size: 15px !important; }\n  .formio-component-html2 > div > div h3 { font-size: 14px !important; }\n  .formio-component-html2 > div > div p { font-size: 13px !important; }\n  .formio-form h1 { font-size: 20px !important; } .formio-form h2 { font-size: 17px !important; }\n}\n/* Tres petits ecrans (<=380px) : gap dates reduit */\n@media (max-width: 380px) {\n  [class*=\"formio-component-\"] .row { gap: 4px !important; }\n}",
+          "input": false,
+          "tableView": false,
+          "refreshOnChange": false
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "key": "informationsPersonnelles",
+      "title": "informationsPersonnelles.title",
+      "label": "informationsPersonnelles.title",
+      "breadcrumbClickable": true,
+      "buttonSettings": {
+        "previous": true,
+        "cancel": true,
+        "next": true
+      },
+      "navigateOnEnter": false,
+      "saveOnEnter": false,
+      "scrollToTop": false,
+      "collapsible": false,
+      "input": false,
+      "tableView": false,
+      "components": [
+        {
+          "type": "panel",
+          "key": "informationsPersonnellesSection",
+          "title": "informationsPersonnellesSection.title",
+          "label": "informationsPersonnellesSection.title",
+          "theme": "success",
+          "hideLabel": false,
+          "collapsible": false,
+          "breadcrumb": "none",
+          "input": false,
+          "tableView": false,
+          "components": [
+            {
+              "type": "columns",
+              "key": "ligneNomPrenoms",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "textfield",
+                      "key": "nom",
+                      "label": "nom",
+                      "input": true,
+                      "tableView": true,
+                      "validateOn": "change",
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "nom.error.required"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "textfield",
+                      "key": "prenoms",
+                      "label": "prenoms",
+                      "input": true,
+                      "tableView": true,
+                      "validateOn": "change",
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "prenoms.error.required"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "columns",
+              "key": "ligneGenrePseudo",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "radio",
+                      "key": "genreDemandeur",
+                      "label": "genreDemandeur",
+                      "input": true,
+                      "tableView": false,
+                      "inline": true,
+                      "optionsLabelPosition": "right",
+                      "values": [
+                        {
+                          "label": "genreDemandeur.M",
+                          "value": "M",
+                          "shortcut": ""
+                        },
+                        {
+                          "label": "genreDemandeur.F",
+                          "value": "F",
+                          "shortcut": ""
+                        }
+                      ],
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "genreDemandeur.error.required"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "textfield",
+                      "key": "pseudonyme",
+                      "label": "pseudonyme",
+                      "input": true,
+                      "tableView": true,
+                      "validateOn": "change",
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "pseudonyme.error.required"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "columns",
+              "key": "ligneEmailNaissance",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "email",
+                      "key": "email",
+                      "label": "email",
+                      "input": true,
+                      "tableView": true,
+                      "validateOn": "change",
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "email.error.required",
+                        "invalid_email": "email.error.invalid_email"
+                      },
+                      "customDefaultValue": "var u=(typeof config!=='undefined' && config.users) ? config.users : {}; value = u.email || '';"
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "htmlelement",
+                      "key": "dateDeNaissanceLabel",
+                      "tag": "div",
+                      "content": "<label class=\"col-form-label field-required\">{{ t('dateDeNaissance') }}</label>",
+                      "input": false,
+                      "tableView": false,
+                      "refreshOnChange": false
+                    },
+                    {
+                      "type": "day",
+                      "key": "dateDeNaissance",
+                      "label": "dateDeNaissance",
+                      "hideLabel": true,
+                      "hideInputLabels": true,
+                      "input": true,
+                      "tableView": false,
+                      "dayFirst": true,
+                      "customClass": "cf-field cf-date",
+                      "fields": {
+                        "day": {
+                          "type": "select",
+                          "placeholder": "date.jour",
+                          "required": true
+                        },
+                        "month": {
+                          "type": "select",
+                          "placeholder": "date.mois",
+                          "required": true
+                        },
+                        "year": {
+                          "type": "select",
+                          "placeholder": "date.annee",
+                          "required": true,
+                          "minYear": 1900,
+                          "maxYear": 2100
+                        }
+                      },
+                      "validate": {
+                        "required": true,
+                        "custom": "var p=String(input||'').split('/'); var d=new Date(+p[2],+p[1]-1,+p[0]); var t=new Date(); t.setHours(0,0,0,0); valid = (!input || p.length!==3 || d <= new Date()) ? true : 'dateDeNaissance.error.custom';"
+                      },
+                      "errors": {
+                        "required": "dateDeNaissance.error.required",
+                        "custom": "dateDeNaissance.error.custom"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "columns",
+              "key": "ligneLieuAdresse",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "textfield",
+                      "key": "lieuDeNaissance",
+                      "label": "lieuDeNaissance",
+                      "input": true,
+                      "tableView": true,
+                      "validateOn": "change",
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "lieuDeNaissance.error.required"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "textfield",
+                      "key": "adresse",
+                      "label": "adresse",
+                      "input": true,
+                      "tableView": true,
+                      "validateOn": "change",
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "adresse.error.required"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "columns",
+              "key": "ligneEidTelephone",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "textfield",
+                      "key": "numeroEid",
+                      "label": "numeroEid",
+                      "input": true,
+                      "tableView": true,
+                      "validateOn": "change",
+                      "validate": {
+                        "required": false
+                      },
+                      "errors": {}
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "htmlelement",
+                      "key": "telephoneDemandeurLabelHtml",
+                      "tag": "div",
+                      "content": "<label class=\"col-form-label field-required\">{{ t('telephoneDemandeurLabel') }}</label>",
+                      "input": false,
+                      "tableView": false,
+                      "refreshOnChange": false
+                    },
+                    {
+                      "type": "columns",
+                      "key": "telephoneDemandeurRow",
+                      "input": false,
+                      "tableView": false,
+                      "columns": [
+                        {
+                          "width": 5,
+                          "offset": 0,
+                          "push": 0,
+                          "pull": 0,
+                          "size": "md",
+                          "components": [
+                            {
+                              "type": "select",
+                              "key": "telephoneDemandeurIndicatif",
+                              "label": "telephoneDemandeurIndicatif",
+                              "hideLabel": true,
+                              "input": true,
+                              "tableView": false,
+                              "widget": "choicesjs",
+                              "dataSrc": "url",
+                              "data": {
+                                "url": "{{config.apiBaseUrl}}{{config.endPoint.indicatif}}",
+                                "headers": []
+                              },
+                              "valueProperty": "value",
+                              "template": "<span>{{ item.label || item.value }}</span>",
+                              "searchEnabled": true,
+                              "defaultValue": "+228",
+                              "lazyLoad": false,
+                              "validate": {
+                                "required": true
+                              },
+                              "errors": {
+                                "required": "telephoneDemandeurIndicatif.error.required"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "width": 7,
+                          "offset": 0,
+                          "push": 0,
+                          "pull": 0,
+                          "size": "md",
+                          "components": [
+                            {
+                              "type": "textfield",
+                              "key": "telephoneDemandeurNumeroLocal",
+                              "label": "telephoneDemandeurNumeroLocal",
+                              "input": true,
+                              "tableView": true,
+                              "validateOn": "change",
+                              "validate": {
+                                "required": true,
+                                "pattern": "^[0-9]{6,15}$"
+                              },
+                              "errors": {
+                                "required": "telephoneDemandeurNumeroLocal.error.required",
+                                "pattern": "telephoneDemandeurNumeroLocal.error.pattern"
+                              },
+                              "description": "telephoneDemandeurNumeroLocal.description",
+                              "hideLabel": true,
+                              "customDefaultValue": "var u=(typeof config!=='undefined' && config.users) ? config.users : {}; var n=String(u.phoneNumber||'').replace(/\\s/g,''); value = (data.telephoneDemandeurIndicatif==='+228' || !data.telephoneDemandeurIndicatif) ? n.replace(/^(\\+|00)?228/,'') : '';"
+                            }
+                          ]
+                        }
+                      ],
+                      "customClass": "cf-phone"
+                    },
+                    {
+                      "type": "hidden",
+                      "key": "telephoneDemandeur",
+                      "label": "telephoneDemandeur",
+                      "input": true,
+                      "tableView": false,
+                      "calculateValue": "value = (data.telephoneDemandeurIndicatif||'') + (data.telephoneDemandeurNumeroLocal||'');"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "columns",
+              "key": "lignePiece",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "select",
+                      "key": "typeDePiece1",
+                      "label": "typeDePiece1",
+                      "placeholder": "typeDePiece1.placeholder",
+                      "input": true,
+                      "tableView": true,
+                      "widget": "choicesjs",
+                      "dataSrc": "values",
+                      "data": {
+                        "values": [
+                          {
+                            "label": "typeDePiece1.cni",
+                            "value": "cni"
+                          },
+                          {
+                            "label": "typeDePiece1.passeport",
+                            "value": "passeport"
+                          },
+                          {
+                            "label": "typeDePiece1.carteElecteur",
+                            "value": "carteElecteur"
+                          }
+                        ]
+                      },
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "typeDePiece1.error.required"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "textfield",
+                      "key": "numeroDeLaPieceDidentite",
+                      "label": "numeroDeLaPieceDidentite",
+                      "input": true,
+                      "tableView": true,
+                      "validateOn": "change",
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "numeroDeLaPieceDidentite.error.required"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "columns",
+              "key": "ligneDatesPiece",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "htmlelement",
+                      "key": "dateDemission1Label",
+                      "tag": "div",
+                      "content": "<label class=\"col-form-label field-required\">{{ t('dateDemission1') }}</label>",
+                      "input": false,
+                      "tableView": false,
+                      "refreshOnChange": false
+                    },
+                    {
+                      "type": "day",
+                      "key": "dateDemission1",
+                      "label": "dateDemission1",
+                      "hideLabel": true,
+                      "hideInputLabels": true,
+                      "input": true,
+                      "tableView": false,
+                      "dayFirst": true,
+                      "customClass": "cf-field cf-date",
+                      "fields": {
+                        "day": {
+                          "type": "select",
+                          "placeholder": "date.jour",
+                          "required": true
+                        },
+                        "month": {
+                          "type": "select",
+                          "placeholder": "date.mois",
+                          "required": true
+                        },
+                        "year": {
+                          "type": "select",
+                          "placeholder": "date.annee",
+                          "required": true,
+                          "minYear": 1900,
+                          "maxYear": 2100
+                        }
+                      },
+                      "validate": {
+                        "required": true,
+                        "custom": "var p=String(input||'').split('/'); var d=new Date(+p[2],+p[1]-1,+p[0]); var t=new Date(); t.setHours(0,0,0,0); valid = (!input || p.length!==3 || d <= new Date()) ? true : 'dateDemission1.error.custom';"
+                      },
+                      "errors": {
+                        "required": "dateDemission1.error.required",
+                        "custom": "dateDemission1.error.custom"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "htmlelement",
+                      "key": "dateDexpiration1Label",
+                      "tag": "div",
+                      "content": "<label class=\"col-form-label field-required\">{{ t('dateDexpiration1') }}</label>",
+                      "input": false,
+                      "tableView": false,
+                      "refreshOnChange": false,
+                      "customConditional": "show = ['passeport','cni'].indexOf(data.typeDePiece1) !== -1;"
+                    },
+                    {
+                      "type": "day",
+                      "key": "dateDexpiration1",
+                      "label": "dateDexpiration1",
+                      "hideLabel": true,
+                      "hideInputLabels": true,
+                      "input": true,
+                      "tableView": false,
+                      "dayFirst": true,
+                      "customClass": "cf-field cf-date",
+                      "fields": {
+                        "day": {
+                          "type": "select",
+                          "placeholder": "date.jour",
+                          "required": true
+                        },
+                        "month": {
+                          "type": "select",
+                          "placeholder": "date.mois",
+                          "required": true
+                        },
+                        "year": {
+                          "type": "select",
+                          "placeholder": "date.annee",
+                          "required": true,
+                          "minYear": 1900,
+                          "maxYear": 2100
+                        }
+                      },
+                      "validate": {
+                        "required": true,
+                        "custom": "var p=String(input||'').split('/'); var d=new Date(+p[2],+p[1]-1,+p[0]); var t=new Date(); t.setHours(0,0,0,0); var q=String(data.dateDemission1||'').split('/'); var e=new Date(+q[2],+q[1]-1,+q[0]); valid = (!input || p.length!==3 || (d > t && (q.length!==3 || isNaN(e) || d > e))) ? true : 'dateDexpiration1.error.custom';"
+                      },
+                      "errors": {
+                        "required": "dateDexpiration1.error.required",
+                        "custom": "dateDexpiration1.error.custom"
+                      },
+                      "customConditional": "show = ['passeport','cni'].indexOf(data.typeDePiece1) !== -1;"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "key": "informationsSurLaDemande",
+      "title": "informationsSurLaDemande.title",
+      "label": "informationsSurLaDemande.title",
+      "breadcrumbClickable": true,
+      "buttonSettings": {
+        "previous": true,
+        "cancel": true,
+        "next": true
+      },
+      "navigateOnEnter": false,
+      "saveOnEnter": false,
+      "scrollToTop": false,
+      "collapsible": false,
+      "input": false,
+      "tableView": false,
+      "components": [
+        {
+          "type": "panel",
+          "key": "informationsSurLaDemandeSection",
+          "title": "informationsSurLaDemandeSection.title",
+          "label": "informationsSurLaDemandeSection.title",
+          "theme": "success",
+          "hideLabel": false,
+          "collapsible": false,
+          "breadcrumb": "none",
+          "input": false,
+          "tableView": false,
+          "components": [
+            {
+              "type": "columns",
+              "key": "ligneStatutDomaine",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "select",
+                      "key": "statut",
+                      "label": "statut",
+                      "placeholder": "statut.placeholder",
+                      "input": true,
+                      "tableView": true,
+                      "widget": "choicesjs",
+                      "dataSrc": "values",
+                      "data": {
+                        "values": [
+                          {
+                            "label": "statut.auteur",
+                            "value": "auteur"
+                          },
+                          {
+                            "label": "statut.compositeur",
+                            "value": "compositeur"
+                          },
+                          {
+                            "label": "statut.interprete",
+                            "value": "interprete"
+                          },
+                          {
+                            "label": "statut.producteur",
+                            "value": "producteur"
+                          },
+                          {
+                            "label": "statut.autre",
+                            "value": "autre"
+                          }
+                        ]
+                      },
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "statut.error.required"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "select",
+                      "key": "domaineArtistique",
+                      "label": "domaineArtistique",
+                      "placeholder": "domaineArtistique.placeholder",
+                      "input": true,
+                      "tableView": true,
+                      "widget": "choicesjs",
+                      "dataSrc": "values",
+                      "data": {
+                        "values": [
+                          {
+                            "label": "domaineArtistique.musique",
+                            "value": "musique"
+                          },
+                          {
+                            "label": "domaineArtistique.audiovisuel",
+                            "value": "audiovisuel"
+                          },
+                          {
+                            "label": "domaineArtistique.litterature",
+                            "value": "litterature"
+                          },
+                          {
+                            "label": "domaineArtistique.artsVisuels",
+                            "value": "artsVisuels"
+                          },
+                          {
+                            "label": "domaineArtistique.autre",
+                            "value": "autre"
+                          }
+                        ]
+                      },
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "domaineArtistique.error.required"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "columns",
+              "key": "lignePrecisions",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "textfield",
+                      "key": "veuillezPreciserVotreStatut",
+                      "label": "veuillezPreciserVotreStatut",
+                      "input": true,
+                      "tableView": true,
+                      "validateOn": "change",
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "veuillezPreciserVotreStatut.error.required"
+                      },
+                      "conditional": {
+                        "show": true,
+                        "when": "statut",
+                        "eq": "autre"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "textfield",
+                      "key": "veuillezPreciserVotreDomaineArtistique",
+                      "label": "veuillezPreciserVotreDomaineArtistique",
+                      "input": true,
+                      "tableView": true,
+                      "validateOn": "change",
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "veuillezPreciserVotreDomaineArtistique.error.required"
+                      },
+                      "conditional": {
+                        "show": true,
+                        "when": "domaineArtistique",
+                        "eq": "autre"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "columns",
+              "key": "ligneAdhesion",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "htmlelement",
+                      "key": "dateDadhesionLabel",
+                      "tag": "div",
+                      "content": "<label class=\"col-form-label field-required\">{{ t('dateDadhesion') }}</label>",
+                      "input": false,
+                      "tableView": false,
+                      "refreshOnChange": false
+                    },
+                    {
+                      "type": "day",
+                      "key": "dateDadhesion",
+                      "label": "dateDadhesion",
+                      "hideLabel": true,
+                      "hideInputLabels": true,
+                      "input": true,
+                      "tableView": false,
+                      "dayFirst": true,
+                      "customClass": "cf-field cf-date",
+                      "fields": {
+                        "day": {
+                          "type": "select",
+                          "placeholder": "date.jour",
+                          "required": true
+                        },
+                        "month": {
+                          "type": "select",
+                          "placeholder": "date.mois",
+                          "required": true
+                        },
+                        "year": {
+                          "type": "select",
+                          "placeholder": "date.annee",
+                          "required": true,
+                          "minYear": 1900,
+                          "maxYear": 2100
+                        }
+                      },
+                      "validate": {
+                        "required": true,
+                        "custom": "var p=String(input||'').split('/'); var d=new Date(+p[2],+p[1]-1,+p[0]); var t=new Date(); t.setHours(0,0,0,0); valid = (!input || p.length!==3 || d <= new Date()) ? true : 'dateDadhesion.error.custom';"
+                      },
+                      "errors": {
+                        "required": "dateDadhesion.error.required",
+                        "custom": "dateDadhesion.error.custom"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "key": "piecesAFournir",
+      "title": "piecesAFournir.title",
+      "label": "piecesAFournir.title",
+      "breadcrumbClickable": true,
+      "buttonSettings": {
+        "previous": true,
+        "cancel": true,
+        "next": true
+      },
+      "navigateOnEnter": false,
+      "saveOnEnter": false,
+      "scrollToTop": false,
+      "collapsible": false,
+      "input": false,
+      "tableView": false,
+      "components": [
+        {
+          "type": "panel",
+          "key": "piecesAFournirSection",
+          "title": "piecesAFournirSection.title",
+          "label": "piecesAFournirSection.title",
+          "theme": "success",
+          "hideLabel": false,
+          "collapsible": false,
+          "breadcrumb": "none",
+          "input": false,
+          "tableView": false,
+          "components": [
+            {
+              "type": "columns",
+              "key": "lignePieces1",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "file",
+                      "key": "photoDidentite",
+                      "label": "photoDidentite",
+                      "input": true,
+                      "tableView": false,
+                      "storage": "url",
+                      "url": "[URL_UPLOAD_XPORTAL]",
+                      "multiple": true,
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "photoDidentite.error.required"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "file",
+                      "key": "pieceDidentite",
+                      "label": "pieceDidentite",
+                      "input": true,
+                      "tableView": false,
+                      "storage": "url",
+                      "url": "[URL_UPLOAD_XPORTAL]",
+                      "multiple": true,
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "pieceDidentite.error.required"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "columns",
+              "key": "lignePieces2",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "file",
+                      "key": "bulletinDadhesion",
+                      "label": "bulletinDadhesion",
+                      "input": true,
+                      "tableView": false,
+                      "storage": "url",
+                      "url": "[URL_UPLOAD_XPORTAL]",
+                      "multiple": true,
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "bulletinDadhesion.error.required"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "file",
+                      "key": "lettreauDG",
+                      "label": "lettreauDG",
+                      "input": true,
+                      "tableView": false,
+                      "storage": "url",
+                      "url": "[URL_UPLOAD_XPORTAL]",
+                      "multiple": true,
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "lettreauDG.error.required"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "columns",
+              "key": "lignePieces3",
+              "input": false,
+              "tableView": false,
+              "columns": [
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": [
+                    {
+                      "type": "file",
+                      "key": "declarationDoeuvre",
+                      "label": "declarationDoeuvre",
+                      "input": true,
+                      "tableView": false,
+                      "storage": "url",
+                      "url": "[URL_UPLOAD_XPORTAL]",
+                      "multiple": true,
+                      "validate": {
+                        "required": true
+                      },
+                      "errors": {
+                        "required": "declarationDoeuvre.error.required"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "width": 6,
+                  "offset": 0,
+                  "push": 0,
+                  "pull": 0,
+                  "size": "md",
+                  "components": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "key": "stepRecap",
+      "title": "stepRecap.title",
+      "label": "stepRecap.title",
+      "breadcrumbClickable": true,
+      "buttonSettings": {
+        "previous": true,
+        "cancel": false,
+        "next": true
+      },
+      "navigateOnEnter": false,
+      "saveOnEnter": false,
+      "scrollToTop": false,
+      "collapsible": false,
+      "input": false,
+      "tableView": false,
+      "components": [
+        {
+          "type": "htmlelement",
+          "key": "htmlRecapView",
+          "tag": "div",
+          "content": "<div id=\"recapDisplay\"></div>",
+          "input": false,
+          "tableView": false,
+          "refreshOnChange": true,
+          "logic": [
+            {
+              "name": "remplissageRecap",
+              "trigger": {
+                "type": "javascript",
+                "javascript": "result = true;"
+              },
+              "actions": [
+                {
+                  "name": "construireRecap",
+                  "type": "customAction",
+                  "customAction": "var R = instance.root || instance;\nvar T = function(k){ return instance.t(k); };\nvar esc = function(v){ return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };\nvar val = function(v){ return (v === undefined || v === null || v === '') ? '-' : esc(v); };\nvar opt = function(k, v){ return v ? esc(T(k + '.' + v)) : '-'; };\nvar fil = function(v){ return (v && v.length) ? v.map(function(f){ return esc(f.originalName || f.name); }).join(', ') : '-'; };\nvar row = function(k, v){ return '<div class=\"recap-row\" style=\"display:flex;align-items:baseline;font-size:15px;line-height:1.4;\"><div class=\"recap-field-label\" style=\"width:50%;min-width:260px;font-weight:400;color:#4b5563;\">' + esc(T(k)) + ' :</div><div class=\"recap-field-value\" style=\"width:50%;color:#111827;font-weight:600;\">' + v + '</div></div>'; };\nvar ico = \"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316a34a' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z'/%3E%3C/svg%3E\";\nvar block = function(tk, n, rows, last){ return '<div class=\"recap-block\" style=\"margin-bottom:' + (last ? '10px' : '30px') + ';\"><div class=\"recap-block-header\" style=\"display:flex;align-items:center;justify-content:space-between;padding-bottom:6px;\"><span class=\"recap-block-title\" style=\"font-size:15px;font-weight:600;color:#16a34a;letter-spacing:-0.1px;\">' + esc(T(tk)) + '</span><button type=\"button\" class=\"recap-btn-edit goto-' + n + '\" data-goto-page=\"' + n + '\" style=\"display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:#16a34a;font-size:15px;font-weight:600;cursor:pointer;padding:2px 6px;\"><img src=\"' + ico + '\" width=\"16\" height=\"16\" alt=\"\" style=\"display:inline-block;vertical-align:middle;\" /><span>' + esc(T('recap.edit')) + '</span></button></div><div class=\"recap-block-divider\" style=\"width:100%;height:1px;background-color:#e5e7eb;margin-top:4px;margin-bottom:18px;\"></div><div class=\"recap-items-table\" style=\"display:flex;flex-direction:column;gap:14px;\">' + rows + '</div></div>'; };\nvar h = '';\nvar r = '';\nr += row('quelTypeDeProcedureSouhaitezVous', opt('quelTypeDeProcedureSouhaitezVous', data.quelTypeDeProcedureSouhaitezVous));\nh += block('recapGuide.title', 0, r, false);\nvar r = '';\nr += row('nom', val(data.nom));\nr += row('prenoms', val(data.prenoms));\nr += row('genreDemandeur', opt('genreDemandeur', data.genreDemandeur));\nr += row('pseudonyme', val(data.pseudonyme));\nr += row('email', val(data.email));\nr += row('dateDeNaissance', val(data.dateDeNaissance));\nr += row('lieuDeNaissance', val(data.lieuDeNaissance));\nr += row('adresse', val(data.adresse));\nr += row('numeroEid', val(data.numeroEid));\nr += row('telephoneDemandeurLabel', (data.telephoneDemandeurNumeroLocal ? esc((data.telephoneDemandeurIndicatif || '') + ' ' + data.telephoneDemandeurNumeroLocal) : '-'));\nr += row('typeDePiece1', opt('typeDePiece1', data.typeDePiece1));\nr += row('numeroDeLaPieceDidentite', val(data.numeroDeLaPieceDidentite));\nr += row('dateDemission1', val(data.dateDemission1));\nif (['passeport','cni'].indexOf(data.typeDePiece1) !== -1) { r += row('dateDexpiration1', val(data.dateDexpiration1)); }\nh += block('informationsPersonnelles.title', 1, r, false);\nvar r = '';\nr += row('statut', opt('statut', data.statut));\nif (data.statut === 'autre') { r += row('veuillezPreciserVotreStatut', val(data.veuillezPreciserVotreStatut)); }\nr += row('domaineArtistique', opt('domaineArtistique', data.domaineArtistique));\nif (data.domaineArtistique === 'autre') { r += row('veuillezPreciserVotreDomaineArtistique', val(data.veuillezPreciserVotreDomaineArtistique)); }\nr += row('dateDadhesion', val(data.dateDadhesion));\nh += block('informationsSurLaDemande.title', 2, r, false);\nvar r = '';\nr += row('photoDidentite', fil(data.photoDidentite));\nr += row('pieceDidentite', fil(data.pieceDidentite));\nr += row('bulletinDadhesion', fil(data.bulletinDadhesion));\nr += row('lettreauDG', fil(data.lettreauDG));\nr += row('declarationDoeuvre', fil(data.declarationDoeuvre));\nh += block('piecesAFournir.title', 3, r, true);\nvar el = document.getElementById('recapDisplay');\nif (el) {\n  el.innerHTML = '<div class=\"recap-container\" style=\"font-family:\\'Poppins\\',\\'Inter\\',sans-serif;color:#111827;padding:10px 4px 0;\">' + h + '</div>';\n  var bs = el.querySelectorAll('.recap-btn-edit[data-goto-page]');\n  for (var i = 0; i < bs.length; i++) { bs[i].onclick = function(){ var p = parseInt(this.getAttribute('data-goto-page'), 10); if (R && R.setPage) { R.setPage(p); } }; }\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "key": "confirmationHonneur",
+          "label": "confirmationHonneur",
+          "labelPosition": "right",
+          "errorLabel": "confirmationHonneur.errorLabel",
+          "defaultValue": false,
+          "customClass": "cf-control",
+          "input": true,
+          "tableView": false,
+          "validate": {
+            "required": true
+          },
+          "errors": {
+            "required": "confirmationHonneur.error.required"
+          }
+        }
+      ]
+    },
+    {
+      "type": "htmlelement",
+      "key": "cfResponsiveRecap",
+      "tag": "style",
+      "content": "@media (max-width: 640px) {\n  .recap-row { flex-direction: column !important; align-items: stretch !important; gap: 3px !important; }\n  .recap-field-label { width: 100% !important; min-width: 0 !important; }\n  .recap-field-value { width: 100% !important; }\n  .recap-items-table { gap: 18px !important; }\n  .recap-block-header { align-items: flex-start !important; gap: 12px !important; }\n  .recap-block-title { min-width: 0 !important; }\n  .recap-btn-edit { flex: 0 0 auto !important; white-space: nowrap !important; }\n}\n.formio-component-confirmationHonneur .form-check-label { color: #434343 !important; }",
+      "input": false,
+      "tableView": false,
+      "refreshOnChange": false
+    },
+    {
+      "type": "htmlelement",
+      "key": "cfDateStyles",
+      "tag": "style",
+      "content": ".formio-form .formio-component-day.cf-date .row { display: flex !important; flex-wrap: nowrap !important; gap: 16px !important; margin-left: 0 !important; margin-right: 0 !important; }\n.formio-form .formio-component-day.cf-date .row > div { flex: 1 1 0 !important; max-width: none !important; width: auto !important; min-width: 0 !important; padding-left: 0 !important; padding-right: 0 !important; margin-bottom: 0 !important; }\n.formio-form .formio-component-day.cf-date .form-group { margin-bottom: 0 !important; }\n.formio-form .formio-component-day.cf-date select { width: 100% !important; min-height: 44px !important; color: #000000 !important; }\n.formio-form .formio-component-day.cf-date .field-required:after { content: none !important; display: none !important; }\n.formio-form .cf-phone .field-required:after { content: none !important; display: none !important; }\n.formio-form .formio-component-htmlelement label.col-form-label { padding-top: 0 !important; padding-bottom: 0 !important; margin-bottom: 8px !important; }\n@media (max-width: 380px) { .formio-form .formio-component-day.cf-date .row { gap: 6px !important; } }",
+      "input": false,
+      "tableView": false,
+      "refreshOnChange": false
+    }
+  ],
+  "i18n": {
+    "fr": {
+      "Previous": "← Précédent",
+      "Next": "Suivant →",
+      "Submit": "Suivant →",
+      "Submit Form": "Suivant →",
+      "Cancel": "Annuler",
+      "Day": "Jour",
+      "Month": "Mois",
+      "Year": "Année",
+      "January": "Janvier",
+      "February": "Février",
+      "March": "Mars",
+      "April": "Avril",
+      "May": "Mai",
+      "June": "Juin",
+      "July": "Juillet",
+      "August": "Août",
+      "September": "Septembre",
+      "October": "Octobre",
+      "November": "Novembre",
+      "December": "Décembre",
+      "invalidDay": "{{field}} n'est pas une date valide.",
+      "required": "{{field}} est obligatoire",
+      "requiredDayField": "Le jour de {{field}} est obligatoire",
+      "requiredMonthField": "Le mois de {{field}} est obligatoire",
+      "requiredYearField": "L'année de {{field}} est obligatoire",
+      "date.jour": "Jour",
+      "date.mois": "Mois",
+      "date.annee": "Année",
+      "fileName": "Nom du fichier",
+      "size": "Taille",
+      "dropFilesToAttach": "Déposez vos fichiers ici ou",
+      "browseFiles": "parcourez vos fichiers",
+      "browse": "parcourir",
+      "or": "ou",
+      "File Name": "Nom du fichier",
+      "Size": "Taille",
+      "Drop files to attach,": "Déposez vos fichiers ici,",
+      "previous": "← Précédent",
+      "next": "Suivant →",
+      "submit": "Suivant →",
+      "cancel": "Annuler",
+      "stepIntro.title": "Description",
+      "htmlInfoboxDescription.text": "Veuillez sélectionner le type de procédure pour afficher le délai et le coût correspondants.",
+      "quelTypeDeProcedureSouhaitezVous": "Quel type de procédure souhaitez-vous ?",
+      "quelTypeDeProcedureSouhaitezVous.normale": "Procédure normale",
+      "quelTypeDeProcedureSouhaitezVous.express": "Procédure express",
+      "quelTypeDeProcedureSouhaitezVous.error.required": "Veuillez renseigner cette information pour continuer",
+      "startButton": "Faire une demande",
+      "html2.delai.title": "Délai d'exécution",
+      "html2.cout.title": "Coût de la procédure",
+      "html2.validite.title": "Durée de validité",
+      "html2.delai.valueNormale": "Entre deux (02) semaines et un (01) mois",
+      "html2.delai.valueExpress": "72 heures",
+      "html2.cout.valueNormale": "1 000 F CFA",
+      "html2.cout.valueExpress": "2 000 F CFA",
+      "html2.validite.value": "1 an",
+      "description.title": "Description",
+      "description.text": "L'attestation de membre du Bureau Togolais du Droit d'Auteur (BUTODRA) est un document administratif officiel délivré aux auteurs et créateurs d'œuvres de l'esprit régulièrement inscrits auprès de l'institution. Elle atteste formellement de l'adhésion de l'intéressé au BUTODRA en tant que titulaire de droits d'auteur. Ce document permet au membre de justifier de son statut légal d'auteur, d'accéder aux services du BUTODRA et de faire valoir ses droits dans le cadre de ses activités artistiques et culturelles.",
+      "description.beneficiaires.title": "Identification des personnes susceptibles / légitimes à faire la demande",
+      "description.beneficiaires.item.1": "Personnes physiques.",
+      "conditions.title": "Conditions",
+      "conditions.item.1": "Être une personne physique exerçant une activité de création artistique ou littéraire.",
+      "conditions.item.2": "Être auteur, artiste-interprète ou créateur d'œuvres de l'esprit.",
+      "conditions.item.3": "Justifier de la paternité d'au moins une œuvre originale.",
+      "conditions.item.4": "Fournir un dossier complet et conforme aux exigences du BUTODRA.",
+      "pieces.title": "Pièces à fournir",
+      "pieces.item.1": "Une photo passeport ;",
+      "pieces.item.2": "Une pièce d'identité ;",
+      "pieces.item.3": "Un bulletin d'adhésion ;",
+      "pieces.item.4": "Une lettre de demande adressée au Directeur Général du BUTODRA ;",
+      "pieces.item.5": "Une déclaration d'œuvre.",
+      "etapes.title": "Étapes",
+      "etapes.item.1": "Remplir en ligne le formulaire de demande en cliquant sur le bouton « Faire une demande ».",
+      "etapes.item.2": "Les informations fournies via le formulaire sont transmises au centre de traitement du BUTODRA, qui procède à une vérification. En cas d'erreur ou de non-conformité, une notification contenant les consignes de correction est envoyée dans votre compte utilisateur, par SMS et par courriel ; une fois les corrections effectuées, les informations sont renvoyées au centre de traitement. En cas de conformité, votre dossier est validé et vous recevrez une notification (compte utilisateur, SMS et courriel) vous invitant à procéder au paiement des frais.",
+      "etapes.item.3": "Effectuer le paiement des frais via les moyens de paiement mobile ou par carte bancaire disponibles sur la plateforme.",
+      "etapes.item.4": "Retirer votre attestation de membre au BUTODRA après réception de la notification de disponibilité.",
+      "nom": "Nom",
+      "nom.error.required": "Veuillez renseigner cette information pour continuer",
+      "prenoms": "Prénoms",
+      "prenoms.error.required": "Veuillez renseigner cette information pour continuer",
+      "genreDemandeur": "Genre",
+      "genreDemandeur.M": "Homme",
+      "genreDemandeur.F": "Femme",
+      "genreDemandeur.error.required": "Veuillez renseigner cette information pour continuer",
+      "pseudonyme": "Pseudonyme",
+      "pseudonyme.error.required": "Veuillez renseigner cette information pour continuer",
+      "email": "Email",
+      "email.error.required": "Veuillez renseigner cette information pour continuer",
+      "dateDeNaissance": "Date de naissance",
+      "dateDeNaissance.error.custom": "La date ne peut pas être postérieure à la date du jour",
+      "dateDeNaissance.error.required": "Veuillez renseigner cette information pour continuer",
+      "lieuDeNaissance": "Lieu de naissance",
+      "lieuDeNaissance.error.required": "Veuillez renseigner cette information pour continuer",
+      "adresse": "Adresse",
+      "adresse.error.required": "Veuillez renseigner cette information pour continuer",
+      "numeroEid": "Numéro e-ID (optionnel)",
+      "telephoneDemandeurLabel": "Numéro de téléphone",
+      "telephoneDemandeurIndicatif": "Numéro de téléphone (indicatif)",
+      "telephoneDemandeurIndicatif.error.required": "Veuillez renseigner cette information pour continuer",
+      "telephoneDemandeurNumeroLocal": "Numéro de téléphone",
+      "telephoneDemandeurNumeroLocal.error.required": "Veuillez renseigner cette information pour continuer",
+      "telephoneDemandeurNumeroLocal.description": "Merci de renseigner un numéro de téléphone fonctionnel. Ce numéro pourra être utilisé pour vous contacter directement par appel ou par SMS.",
+      "telephoneDemandeurNumeroLocal.error.pattern": "Le numéro doit comporter de 6 à 15 chiffres",
+      "telephoneDemandeur": "Numéro de téléphone complet",
+      "typeDePiece1": "Type de pièce",
+      "typeDePiece1.placeholder": "Sélectionnez",
+      "typeDePiece1.cni": "Carte nationale d'identité",
+      "typeDePiece1.passeport": "Passeport",
+      "typeDePiece1.carteElecteur": "Carte d'électeur",
+      "typeDePiece1.error.required": "Veuillez renseigner cette information pour continuer",
+      "numeroDeLaPieceDidentite": "Numéro de la pièce d'identité",
+      "numeroDeLaPieceDidentite.error.required": "Veuillez renseigner cette information pour continuer",
+      "dateDemission1": "Date d'émission",
+      "dateDemission1.error.custom": "La date ne peut pas être postérieure à la date du jour",
+      "dateDemission1.error.required": "Veuillez renseigner cette information pour continuer",
+      "dateDexpiration1": "Date d'expiration",
+      "dateDexpiration1.error.custom": "La date d'expiration doit être supérieure à la date d'émission",
+      "dateDexpiration1.error.required": "Veuillez renseigner cette information pour continuer",
+      "email.error.invalid_email": "Veuillez renseigner une adresse email valide pour continuer",
+      "informationsPersonnelles.title": "Informations personnelles",
+      "informationsPersonnellesSection.title": "Informations personnelles du demandeur",
+      "statut": "Statut",
+      "statut.placeholder": "Sélectionnez",
+      "statut.auteur": "Auteur",
+      "statut.compositeur": "Compositeur",
+      "statut.interprete": "Interprète",
+      "statut.producteur": "Producteur",
+      "statut.autre": "Autre (préciser)",
+      "statut.error.required": "Veuillez renseigner cette information pour continuer",
+      "domaineArtistique": "Domaine artistique",
+      "domaineArtistique.placeholder": "Sélectionnez",
+      "domaineArtistique.musique": "Musique",
+      "domaineArtistique.audiovisuel": "Audiovisuel",
+      "domaineArtistique.litterature": "Littérature",
+      "domaineArtistique.artsVisuels": "Arts visuels",
+      "domaineArtistique.autre": "Autre (préciser)",
+      "domaineArtistique.error.required": "Veuillez renseigner cette information pour continuer",
+      "veuillezPreciserVotreStatut": "Veuillez préciser votre statut",
+      "veuillezPreciserVotreStatut.error.required": "Veuillez renseigner cette information pour continuer",
+      "veuillezPreciserVotreDomaineArtistique": "Veuillez préciser votre domaine artistique",
+      "veuillezPreciserVotreDomaineArtistique.error.required": "Veuillez renseigner cette information pour continuer",
+      "dateDadhesion": "Date d'adhésion",
+      "dateDadhesion.error.custom": "La date ne peut pas être postérieure à la date du jour",
+      "dateDadhesion.error.required": "Veuillez renseigner cette information pour continuer",
+      "informationsSurLaDemande.title": "Informations sur la demande",
+      "informationsSurLaDemandeSection.title": "Informations sur la demande",
+      "photoDidentite": "Photo d'identité",
+      "photoDidentite.error.required": "Veuillez renseigner cette information pour continuer",
+      "pieceDidentite": "Pièce d'identité",
+      "pieceDidentite.error.required": "Veuillez renseigner cette information pour continuer",
+      "bulletinDadhesion": "Bulletin d'adhésion",
+      "bulletinDadhesion.error.required": "Veuillez renseigner cette information pour continuer",
+      "lettreauDG": "Lettre de demande adressée au Directeur Général du BUTODRA",
+      "lettreauDG.error.required": "Veuillez renseigner cette information pour continuer",
+      "declarationDoeuvre": "Déclaration d'œuvre",
+      "declarationDoeuvre.error.required": "Veuillez renseigner cette information pour continuer",
+      "piecesAFournir.title": "Pièces à fournir",
+      "piecesAFournirSection.title": "Pièces à fournir",
+      "stepRecap.title": "Récapitulatif",
+      "recap.edit": "Modifier",
+      "recapGuide.title": "Type de procédure",
+      "recap.yes": "Oui",
+      "confirmationHonneur": "Je certifie sur l'honneur l'exactitude de toutes les informations fournies ci-dessus",
+      "confirmationHonneur.errorLabel": "La déclaration sur l'honneur",
+      "confirmationHonneur.error.required": "La déclaration sur l'honneur est obligatoire"
+    },
+    "en": {
+      "Previous": "← Previous",
+      "Next": "Next →",
+      "Submit": "Next →",
+      "Submit Form": "Next →",
+      "Cancel": "Cancel",
+      "Day": "Day",
+      "Month": "Month",
+      "Year": "Year",
+      "January": "January",
+      "February": "February",
+      "March": "March",
+      "April": "April",
+      "May": "May",
+      "June": "June",
+      "July": "July",
+      "August": "August",
+      "September": "September",
+      "October": "October",
+      "November": "November",
+      "December": "December",
+      "invalidDay": "{{field}} is not a valid day.",
+      "required": "{{field}} is required",
+      "requiredDayField": "The day of {{field}} is required",
+      "requiredMonthField": "The month of {{field}} is required",
+      "requiredYearField": "The year of {{field}} is required",
+      "date.jour": "Day",
+      "date.mois": "Month",
+      "date.annee": "Year",
+      "fileName": "File name",
+      "size": "Size",
+      "dropFilesToAttach": "Drop files to attach, or",
+      "browseFiles": "browse files",
+      "browse": "browse",
+      "or": "or",
+      "File Name": "File name",
+      "Size": "Size",
+      "Drop files to attach,": "Drop files to attach,",
+      "previous": "← Previous",
+      "next": "Next →",
+      "submit": "Next →",
+      "cancel": "Cancel",
+      "stepIntro.title": "Description",
+      "htmlInfoboxDescription.text": "Please select the type of procedure to display the corresponding processing time and cost.",
+      "quelTypeDeProcedureSouhaitezVous": "Which procedure do you wish to follow?",
+      "quelTypeDeProcedureSouhaitezVous.normale": "Normal procedure",
+      "quelTypeDeProcedureSouhaitezVous.express": "Express procedure",
+      "quelTypeDeProcedureSouhaitezVous.error.required": "Please provide this information to continue",
+      "startButton": "Apply",
+      "html2.delai.title": "Processing time",
+      "html2.cout.title": "Cost of the procedure",
+      "html2.validite.title": "Period of validity",
+      "html2.delai.valueNormale": "Between two (02) weeks and one (01) month",
+      "html2.delai.valueExpress": "72 hours",
+      "html2.cout.valueNormale": "1,000 XOF",
+      "html2.cout.valueExpress": "2,000 XOF",
+      "html2.validite.value": "1 year",
+      "description.title": "Description",
+      "description.text": "The BUTODRA membership certificate is an official administrative document issued by the Togolese Copyright Office to authors and creators of works of the mind duly registered with the institution. It formally certifies the holder's membership of BUTODRA as a copyright holder. This document enables the member to prove their legal status as an author, to access BUTODRA services and to assert their rights in the course of their artistic and cultural activities.",
+      "description.beneficiaires.title": "Who may apply",
+      "description.beneficiaires.item.1": "Natural persons.",
+      "conditions.title": "Conditions",
+      "conditions.item.1": "Be a natural person engaged in artistic or literary creation.",
+      "conditions.item.2": "Be an author, performer or creator of works of the mind.",
+      "conditions.item.3": "Prove authorship of at least one original work.",
+      "conditions.item.4": "Provide a complete file that complies with BUTODRA requirements.",
+      "pieces.title": "Required documents",
+      "pieces.item.1": "A passport photograph;",
+      "pieces.item.2": "An identity document;",
+      "pieces.item.3": "A membership form;",
+      "pieces.item.4": "An application letter addressed to the Director General of BUTODRA;",
+      "pieces.item.5": "A declaration of work.",
+      "etapes.title": "Steps",
+      "etapes.item.1": "Complete the application form online by clicking the \"Apply\" button.",
+      "etapes.item.2": "The information provided through the form is sent to the BUTODRA processing centre, which checks it. If there is an error or non-compliance, a notification containing correction instructions is sent to your user account, by SMS and by email; once the corrections have been made, the information is sent back to the processing centre. If the application is compliant, your file is validated and you will receive a notification (user account, SMS and email) inviting you to pay the fees.",
+      "etapes.item.3": "Pay the fees using the mobile or bank card payment methods available on the platform.",
+      "etapes.item.4": "Collect your membership certificate from BUTODRA after receiving the availability notification.",
+      "nom": "Last name",
+      "nom.error.required": "Please provide this information to continue",
+      "prenoms": "First names",
+      "prenoms.error.required": "Please provide this information to continue",
+      "genreDemandeur": "Gender",
+      "genreDemandeur.M": "Male",
+      "genreDemandeur.F": "Female",
+      "genreDemandeur.error.required": "Please provide this information to continue",
+      "pseudonyme": "Pseudonym",
+      "pseudonyme.error.required": "Please provide this information to continue",
+      "email": "Email",
+      "email.error.required": "Please provide this information to continue",
+      "dateDeNaissance": "Date of birth",
+      "dateDeNaissance.error.custom": "The date cannot be later than today",
+      "dateDeNaissance.error.required": "Please provide this information to continue",
+      "lieuDeNaissance": "Place of birth",
+      "lieuDeNaissance.error.required": "Please provide this information to continue",
+      "adresse": "Address",
+      "adresse.error.required": "Please provide this information to continue",
+      "numeroEid": "e-ID number (optional)",
+      "telephoneDemandeurLabel": "Phone number",
+      "telephoneDemandeurIndicatif": "Phone number (country code)",
+      "telephoneDemandeurIndicatif.error.required": "Please provide this information to continue",
+      "telephoneDemandeurNumeroLocal": "Phone number",
+      "telephoneDemandeurNumeroLocal.error.required": "Please provide this information to continue",
+      "telephoneDemandeurNumeroLocal.description": "Please provide a working phone number. This number may be used to contact you directly by call or SMS.",
+      "telephoneDemandeurNumeroLocal.error.pattern": "The number must contain 6 to 15 digits",
+      "telephoneDemandeur": "Full phone number",
+      "typeDePiece1": "Type of document",
+      "typeDePiece1.placeholder": "Select",
+      "typeDePiece1.cni": "National identity card",
+      "typeDePiece1.passeport": "Passport",
+      "typeDePiece1.carteElecteur": "Voter card",
+      "typeDePiece1.error.required": "Please provide this information to continue",
+      "numeroDeLaPieceDidentite": "Identity document number",
+      "numeroDeLaPieceDidentite.error.required": "Please provide this information to continue",
+      "dateDemission1": "Date of issue",
+      "dateDemission1.error.custom": "The date cannot be later than today",
+      "dateDemission1.error.required": "Please provide this information to continue",
+      "dateDexpiration1": "Expiry date",
+      "dateDexpiration1.error.custom": "The expiry date must be later than the date of issue",
+      "dateDexpiration1.error.required": "Please provide this information to continue",
+      "email.error.invalid_email": "Please provide a valid email address to continue",
+      "informationsPersonnelles.title": "Personal information",
+      "informationsPersonnellesSection.title": "Applicant's personal information",
+      "statut": "Status",
+      "statut.placeholder": "Select",
+      "statut.auteur": "Author",
+      "statut.compositeur": "Composer",
+      "statut.interprete": "Performer",
+      "statut.producteur": "Producer",
+      "statut.autre": "Other (please specify)",
+      "statut.error.required": "Please provide this information to continue",
+      "domaineArtistique": "Artistic field",
+      "domaineArtistique.placeholder": "Select",
+      "domaineArtistique.musique": "Music",
+      "domaineArtistique.audiovisuel": "Audiovisual",
+      "domaineArtistique.litterature": "Literature",
+      "domaineArtistique.artsVisuels": "Visual arts",
+      "domaineArtistique.autre": "Other (please specify)",
+      "domaineArtistique.error.required": "Please provide this information to continue",
+      "veuillezPreciserVotreStatut": "Please specify your status",
+      "veuillezPreciserVotreStatut.error.required": "Please provide this information to continue",
+      "veuillezPreciserVotreDomaineArtistique": "Please specify your artistic field",
+      "veuillezPreciserVotreDomaineArtistique.error.required": "Please provide this information to continue",
+      "dateDadhesion": "Membership date",
+      "dateDadhesion.error.custom": "The date cannot be later than today",
+      "dateDadhesion.error.required": "Please provide this information to continue",
+      "informationsSurLaDemande.title": "Application details",
+      "informationsSurLaDemandeSection.title": "Application details",
+      "photoDidentite": "Identity photograph",
+      "photoDidentite.error.required": "Please provide this information to continue",
+      "pieceDidentite": "Identity document",
+      "pieceDidentite.error.required": "Please provide this information to continue",
+      "bulletinDadhesion": "Membership form",
+      "bulletinDadhesion.error.required": "Please provide this information to continue",
+      "lettreauDG": "Application letter addressed to the Director General of BUTODRA",
+      "lettreauDG.error.required": "Please provide this information to continue",
+      "declarationDoeuvre": "Declaration of work",
+      "declarationDoeuvre.error.required": "Please provide this information to continue",
+      "piecesAFournir.title": "Required documents",
+      "piecesAFournirSection.title": "Required documents",
+      "stepRecap.title": "Summary",
+      "recap.edit": "Edit",
+      "recapGuide.title": "Type of procedure",
+      "recap.yes": "Yes",
+      "confirmationHonneur": "I solemnly certify that all the information provided above is accurate",
+      "confirmationHonneur.errorLabel": "The sworn statement",
+      "confirmationHonneur.error.required": "The sworn statement is required"
+    }
+  }
+}
+''';
+}

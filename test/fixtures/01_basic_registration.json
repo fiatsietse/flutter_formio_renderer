@@ -1,0 +1,65 @@
+{
+  "display": "form",
+  "title": "User Registration",
+  "name": "userRegistration",
+  "components": [
+    {
+      "type": "textfield",
+      "key": "firstName",
+      "label": "First Name",
+      "placeholder": "Enter first name",
+      "validate": {
+        "required": true,
+        "minLength": 2
+      }
+    },
+    {
+      "type": "textfield",
+      "key": "lastName",
+      "label": "Last Name",
+      "placeholder": "Enter last name",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "email",
+      "key": "email",
+      "label": "Email Address",
+      "placeholder": "name@example.com",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "password",
+      "key": "password",
+      "label": "Password",
+      "placeholder": "Enter password",
+      "validate": {
+        "required": true,
+        "minLength": 6
+      }
+    },
+    {
+      "type": "phoneNumber",
+      "key": "phone",
+      "label": "Phone Number",
+      "placeholder": "+1 555-0199"
+    },
+    {
+      "type": "checkbox",
+      "key": "terms",
+      "label": "I agree to the Terms of Service",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "button",
+      "key": "submit",
+      "label": "Register",
+      "action": "submit"
+    }
+  ]
+}

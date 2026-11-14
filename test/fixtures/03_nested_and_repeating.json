@@ -1,0 +1,72 @@
+{
+  "display": "form",
+  "title": "Organization Hierarchy",
+  "name": "orgHierarchy",
+  "components": [
+    {
+      "type": "container",
+      "key": "contactInfo",
+      "label": "Contact Information",
+      "components": [
+        {
+          "type": "textfield",
+          "key": "city",
+          "label": "City"
+        },
+        {
+          "type": "textfield",
+          "key": "postalCode",
+          "label": "Postal Code"
+        }
+      ]
+    },
+    {
+      "type": "datagrid",
+      "key": "employees",
+      "label": "Employees",
+      "validate": {
+        "minRows": 1,
+        "maxRows": 5
+      },
+      "components": [
+        {
+          "type": "textfield",
+          "key": "name",
+          "label": "Employee Name",
+          "defaultValue": "New Employee",
+          "validate": {
+            "required": true
+          }
+        },
+        {
+          "type": "number",
+          "key": "age",
+          "label": "Age",
+          "defaultValue": 25
+        },
+        {
+          "type": "textfield",
+          "key": "role",
+          "label": "Role"
+        }
+      ]
+    },
+    {
+      "type": "editgrid",
+      "key": "assets",
+      "label": "Assets",
+      "components": [
+        {
+          "type": "textfield",
+          "key": "assetName",
+          "label": "Asset Name"
+        },
+        {
+          "type": "number",
+          "key": "value",
+          "label": "Value"
+        }
+      ]
+    }
+  ]
+}

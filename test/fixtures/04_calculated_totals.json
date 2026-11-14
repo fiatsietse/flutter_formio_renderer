@@ -1,0 +1,65 @@
+{
+  "display": "form",
+  "title": "Invoice Calculation",
+  "name": "invoiceCalculation",
+  "components": [
+    {
+      "type": "datagrid",
+      "key": "items",
+      "label": "Invoice Items",
+      "components": [
+        {
+          "type": "textfield",
+          "key": "description",
+          "label": "Description"
+        },
+        {
+          "type": "number",
+          "key": "quantity",
+          "label": "Quantity",
+          "defaultValue": 1
+        },
+        {
+          "type": "number",
+          "key": "unitPrice",
+          "label": "Unit Price",
+          "defaultValue": 10
+        },
+        {
+          "type": "number",
+          "key": "lineTotal",
+          "label": "Line Total",
+          "calculateValue": {
+            "*": [
+              { "var": "row.quantity" },
+              { "var": "row.unitPrice" }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "number",
+      "key": "discount",
+      "label": "Discount",
+      "defaultValue": 5
+    },
+    {
+      "type": "number",
+      "key": "shipping",
+      "label": "Shipping Fee",
+      "defaultValue": 15
+    },
+    {
+      "type": "number",
+      "key": "finalTotal",
+      "label": "Final Total",
+      "calculateValue": {
+        "-": [
+          { "+": [{ "var": "data.shipping" }, 100] },
+          { "var": "data.discount" }
+        ]
+      }
+    }
+  ]
+}

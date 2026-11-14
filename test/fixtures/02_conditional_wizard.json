@@ -1,0 +1,72 @@
+{
+  "display": "wizard",
+  "title": "Application Wizard",
+  "name": "applicationWizard",
+  "components": [
+    {
+      "type": "panel",
+      "key": "page1",
+      "title": "Personal Details",
+      "components": [
+        {
+          "type": "textfield",
+          "key": "fullName",
+          "label": "Full Name",
+          "validate": {
+            "required": true
+          }
+        },
+        {
+          "type": "checkbox",
+          "key": "hasSpouse",
+          "label": "Do you have a spouse?"
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "key": "page2",
+      "title": "Spouse Details",
+      "conditional": {
+        "show": true,
+        "when": "hasSpouse",
+        "eq": "true"
+      },
+      "components": [
+        {
+          "type": "textfield",
+          "key": "spouseName",
+          "label": "Spouse Name",
+          "validate": {
+            "required": true
+          }
+        },
+        {
+          "type": "textfield",
+          "key": "spouseOccupation",
+          "label": "Spouse Occupation"
+        }
+      ]
+    },
+    {
+      "type": "panel",
+      "key": "page3",
+      "title": "Confirmation",
+      "components": [
+        {
+          "type": "textarea",
+          "key": "notes",
+          "label": "Additional Notes"
+        },
+        {
+          "type": "checkbox",
+          "key": "confirm",
+          "label": "Confirm Application",
+          "validate": {
+            "required": true
+          }
+        }
+      ]
+    }
+  ]
+}

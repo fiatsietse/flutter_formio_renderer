@@ -1,0 +1,63 @@
+{
+  "display": "form",
+  "title": "Cyclic and Unsupported Features",
+  "name": "cyclicAndUnsupported",
+  "components": [
+    {
+      "type": "textfield",
+      "key": "fieldA",
+      "label": "Field A",
+      "logic": [
+        {
+          "name": "Depend On B",
+          "trigger": {
+            "type": "simple",
+            "simple": {
+              "when": "fieldB",
+              "eq": "trigger"
+            }
+          },
+          "actions": [
+            {
+              "name": "Set Value A",
+              "type": "value",
+              "value": "updated_from_b"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "textfield",
+      "key": "fieldB",
+      "label": "Field B",
+      "logic": [
+        {
+          "name": "Depend On A",
+          "trigger": {
+            "type": "simple",
+            "simple": {
+              "when": "fieldA",
+              "eq": "updated_from_b"
+            }
+          },
+          "actions": [
+            {
+              "name": "Set Value B",
+              "type": "value",
+              "value": "trigger"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "unknown_future_component",
+      "key": "unsupportedRequiredField",
+      "label": "Special Plugin Field",
+      "validate": {
+        "required": true
+      }
+    }
+  ]
+}
