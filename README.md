@@ -174,17 +174,14 @@ dart format lib test example/lib example/test
 # 2. Run static analysis (0 warnings / 0 errors)
 flutter analyze lib
 
-# 3. Run all automated tests (34 unit & widget tests)
+# 3. Run all automated tests (unit & widget tests)
 flutter test
 
-# 4. Run the BUTODRA real-world enterprise wizard tests
-flutter test test/unit/butodra_wizard_test.dart test/widget/butodra_wizard_widget_test.dart
-
-# 5. Run the example app tests
+# 4. Run the example app tests
 cd example
 flutter test
 
-# 6. Launch the interactive showcase application
+# 5. Launch the interactive showcase application
 cd example
 flutter run -d chrome # or android, ios, macos, windows, linux
 ```

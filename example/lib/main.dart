@@ -194,10 +194,6 @@ class _FormioShowcaseScreenState extends State<FormioShowcaseScreen> {
                                     value: '08_file_upload_and_signature',
                                     child:
                                         Text('8. File Upload & Signature Pad')),
-                                DropdownMenuItem(
-                                    value: '09_delivrance_attestation_butodra',
-                                    child: Text(
-                                        '9. BUTODRA Member Certificate (Wizard)')),
                               ],
                               onChanged: (key) {
                                 if (key != null) {

@@ -20,7 +20,7 @@ void main() {
   });
 
   testWidgets(
-      'ExampleApp switches to BUTODRA wizard fixture and renders properly',
+      'ExampleApp switches to conditional wizard fixture and renders properly',
       (WidgetTester tester) async {
     tester.view.devicePixelRatio = 1.0;
     tester.view.physicalSize = const Size(1280, 1200);
@@ -36,15 +36,15 @@ void main() {
     await tester.tap(find.text('1. Basic Registration Form'));
     await tester.pumpAndSettle();
 
-    // Select BUTODRA fixture
-    final butodraItem =
-        find.text('9. BUTODRA Member Certificate (Wizard)').last;
-    await tester.tap(butodraItem);
+    // Select Conditional Wizard fixture
+    final wizardItem =
+        find.text('2. Conditional Multi-Step Wizard').last;
+    await tester.tap(wizardItem);
     await tester.pumpAndSettle();
 
-    // Verify BUTODRA is displayed with translated labels (English by default)
-    expect(find.text('9. BUTODRA Member Certificate (Wizard)'), findsWidgets);
-    expect(find.text('Normal procedure'), findsOneWidget);
+    // Verify Wizard is displayed with step navigation buttons
+    expect(find.text('2. Conditional Multi-Step Wizard'), findsWidgets);
+    expect(find.text('Next'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }
