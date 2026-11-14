@@ -1,3 +1,10 @@
+## 0.1.1
+
+* Sanitized test suites and removed client-specific schemas.
+* Added `safe_script_evaluator_test.dart` for generic conditional and calculation scripts.
+* Added `html_styling_widget_test.dart` for CSS style parsing and native flex cards.
+* Cleaned up example fixtures and dependencies.
+
 ## 0.1.0
 
 * Initial release of `flutter_formio_renderer`.

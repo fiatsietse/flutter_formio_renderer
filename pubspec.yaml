@@ -1,6 +1,6 @@
 name: flutter_formio_renderer
 description: "A native Flutter renderer for Form.io JSON schemas with reactive conditional logic, calculated values, validation, repeating grids, and multi-step wizards."
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/fiatsietse/flutter_formio_renderer
 repository: https://github.com/fiatsietse/flutter_formio_renderer
 issue_tracker: https://github.com/fiatsietse/flutter_formio_renderer/issues
