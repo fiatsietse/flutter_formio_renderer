@@ -52,7 +52,7 @@ void main() {
       const evaluator = SafeScriptEvaluator();
 
       // 1. Initial state: radio is null -> !data.x is true
-      final ctxEmpty = FormioScriptContext(
+      const ctxEmpty = FormioScriptContext(
         data: {},
         row: {},
       );
@@ -64,7 +64,7 @@ void main() {
       expect(res1.value, isTrue);
 
       // 2. Radio selected -> !data.x is false
-      final ctxSelected = FormioScriptContext(
+      const ctxSelected = FormioScriptContext(
         data: {'quelTypeDeProcedureSouhaitezVous': 'normale'},
         row: {},
       );
@@ -84,7 +84,7 @@ void main() {
       expect(res3.value, isTrue);
 
       // 4. Piece type membership check: ['passeport','cni'].indexOf(data.typeDePiece1) !== -1
-      final ctxCni = FormioScriptContext(
+      const ctxCni = FormioScriptContext(
         data: {'typeDePiece1': 'cni'},
         row: {},
       );
@@ -95,7 +95,7 @@ void main() {
       expect(resCni.isSuccess, isTrue);
       expect(resCni.value, isTrue);
 
-      final ctxOther = FormioScriptContext(
+      const ctxOther = FormioScriptContext(
         data: {'typeDePiece1': 'autre'},
         row: {},
       );
@@ -107,7 +107,7 @@ void main() {
       expect(resOther.value, isFalse);
 
       // 5. Telephone calculation: value = (data.a || '') + (data.b || '')
-      final ctxPhone = FormioScriptContext(
+      const ctxPhone = FormioScriptContext(
         data: {
           'telephoneDemandeurIndicatif': '+228',
           'telephoneDemandeurNumeroLocal': '90000000',
@@ -126,7 +126,7 @@ void main() {
     test(
         'FormioStateManager reactively updates visibility of procedure details and translates labels',
         () {
-      final options = const FormioOptions(
+      const options = FormioOptions(
         locale: Locale('fr'),
       );
       final manager = FormioStateManager(

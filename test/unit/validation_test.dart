@@ -5,7 +5,7 @@ void main() {
   group('FormioComponentValidator', () {
     test('validates required fields, minLength, pattern, and customMessage',
         () {
-      final schema = FormioFormSchema.parse({
+      final schema = FormioFormSchema.parse(const {
         'display': 'form',
         'components': [
           {
@@ -15,7 +15,7 @@ void main() {
             'validate': {
               'required': true,
               'minLength': 4,
-              'pattern': '^[A-Z]{2}[0-9]{2}\$',
+              'pattern': r'^[A-Z]{2}[0-9]{2}$',
               'customMessage':
                   '{field} must be 2 uppercase letters followed by 2 digits.'
             }
@@ -50,7 +50,7 @@ void main() {
     });
 
     test('validates email and numeric bounds', () {
-      final schema = FormioFormSchema.parse({
+      final schema = FormioFormSchema.parse(const {
         'display': 'form',
         'components': [
           {
@@ -84,7 +84,7 @@ void main() {
     });
 
     test('hidden or disabled fields are not validated', () {
-      final schema = FormioFormSchema.parse({
+      final schema = FormioFormSchema.parse(const {
         'display': 'form',
         'components': [
           {
@@ -116,7 +116,7 @@ void main() {
     });
 
     test('maps server-returned validation errors back to fields', () {
-      final schema = FormioFormSchema.parse({
+      final schema = FormioFormSchema.parse(const {
         'display': 'form',
         'components': [
           {'type': 'textfield', 'key': 'username', 'label': 'Username'}
@@ -128,7 +128,7 @@ void main() {
 
       // Server returns error
       manager.setServerErrors(
-          {'username': 'This username is already taken by another user.'});
+          const {'username': 'This username is already taken by another user.'});
 
       final state = manager.getState('username')!;
       expect(state.hasErrors, isTrue);

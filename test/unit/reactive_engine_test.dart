@@ -24,7 +24,7 @@ void main() {
     });
 
     test('hiding a field follows clearOnHide retention semantics', () {
-      final schema = FormioFormSchema.parse({
+      final schema = FormioFormSchema.parse(const {
         'display': 'form',
         'components': [
           {'type': 'checkbox', 'key': 'showExtra', 'label': 'Show Extra'},
@@ -53,7 +53,7 @@ void main() {
     });
 
     test('preserves value when clearOnHide is false', () {
-      final schema = FormioFormSchema.parse({
+      final schema = FormioFormSchema.parse(const {
         'display': 'form',
         'components': [
           {'type': 'checkbox', 'key': 'showNotes', 'label': 'Show Notes'},
