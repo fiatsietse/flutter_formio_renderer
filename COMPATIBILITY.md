@@ -34,7 +34,7 @@ Status legend:
 | `checkbox` | **Supported** | `label`, `defaultValue`, `disabled`, `hidden`, `validate.required` | Boolean storage; required means must be checked (`true`). |
 | `selectboxes` | **Supported** | `values`, `defaultValue`, `minSelectedCount`, `maxSelectedCount` | Stored as map of boolean flags: `{"optA": true, "optB": false}`. |
 | `radio` | **Supported** | `values`, `defaultValue`, `disabled`, `hidden`, `validate.required` | Single selection stored as primitive value. |
-| `select` | **Supported** | `dataSrc` ('values', 'url'), `data`, `multiple`, `valueProperty`, `template`, `searchField` | Local and remote sources via `FormioRemoteOptionsAdapter`. |
+| `select` | **Supported** | `dataSrc` ('values', 'url'), `data`, `multiple`, `valueProperty`, `template`, `searchField` | URL sources use HTTP GET by default; `FormioRemoteOptionsAdapter` supports authenticated or custom endpoints. |
 | `datetime` | **Supported** | `enableDate`, `enableTime`, `format`, `defaultValue`, `disabled` | Material Date & Time pickers; ISO 8601 storage. |
 | `day` | **Supported** | `dayFirst`, `fields`, `defaultValue`, `disabled` | Tri-input (Day/Month/Year) stored as `DD/MM/YYYY`. |
 | `time` | **Supported** | `format`, `defaultValue`, `disabled` | Time picker stored as `HH:mm:ss`. |

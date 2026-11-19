@@ -1,3 +1,9 @@
+## 0.2.0
+
+* Added default HTTP GET loading for select components using `dataSrc: "url"`.
+* Added configurable headers and base URL support through `FormioHttpRemoteOptionsAdapter`.
+* Added remote option mapping for `valueProperty` and Form.io templates.
+
 ## 0.1.1
 
 * Sanitized test suites and removed client-specific schemas.

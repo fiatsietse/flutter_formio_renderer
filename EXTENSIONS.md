@@ -50,7 +50,18 @@ Now, any Form.io schema containing `"type": "rating"` will render your custom Fl
 
 ## 2. Remote Options Adapter (`FormioRemoteOptionsAdapter`)
 
-Select components configured with `"dataSrc": "url"` fetch options dynamically through `FormioRemoteOptionsAdapter`:
+Select components configured with `"dataSrc": "url"` use the built-in HTTP GET adapter for absolute URLs. Configure the adapter when the endpoint needs headers or uses a relative URL:
+
+```dart
+FormioOptions(
+  remoteOptionsAdapter: FormioHttpRemoteOptionsAdapter(
+    baseUrl: 'https://api.example.com',
+    headers: {'Authorization': 'Bearer $token'},
+  ),
+);
+```
+
+Provide a custom adapter for other authentication or response formats:
 
 ```dart
 class MyBackendOptionsAdapter implements FormioRemoteOptionsAdapter {

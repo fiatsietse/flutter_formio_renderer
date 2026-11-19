@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/testing.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_formio_renderer/flutter_formio_renderer.dart';
 
 void main() {
@@ -40,6 +43,57 @@ void main() {
 
       // Dropdown should be loaded with options
       expect(find.text('Select an option...'), findsWidgets);
+    });
+
+    testWidgets('URL select uses HTTP GET and Form.io value/template fields',
+        (tester) async {
+      final requestedUris = <Uri>[];
+      final adapter = FormioHttpRemoteOptionsAdapter(
+        client: MockClient((request) async {
+          expect(request.method, 'GET');
+          requestedUris.add(request.url);
+          return http.Response(
+            jsonEncode([
+              {'id': 'paris', 'name': 'Paris'},
+              {'id': 'lyon', 'name': 'Lyon'},
+            ]),
+            200,
+          );
+        }),
+      );
+      final schema = FormioFormSchema.parse(jsonEncode({
+        'components': [
+          {
+            'type': 'select',
+            'key': 'city',
+            'label': 'City',
+            'dataSrc': 'url',
+            'data': {'url': 'https://api.example.test/cities'},
+            'valueProperty': 'id',
+            'template': '<span>{{ item.name }}</span>',
+          },
+        ],
+      }));
+      final controller = FormioController();
+
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: FormioForm(
+            schema: schema,
+            controller: controller,
+            options: FormioOptions(remoteOptionsAdapter: adapter),
+          ),
+        ),
+      ));
+      await tester.pumpAndSettle();
+
+      expect(requestedUris, [Uri.parse('https://api.example.test/cities')]);
+      await tester.tap(find.byType(DropdownButtonFormField<dynamic>));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Paris').last);
+      await tester.pumpAndSettle();
+
+      expect(controller.submissionData['city'], 'paris');
     });
 
     testWidgets('file upload adapter uploads file and serializes metadata',

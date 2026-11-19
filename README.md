@@ -38,7 +38,7 @@ A robust, enterprise-ready Flutter renderer for existing Form.io JSON schemas. R
   - Server-returned field errors mapping (`controller.setServerErrors`).
   - Hidden and disabled fields are excluded from validation.
 - **Pluggable Architecture**:
-  - Remote dropdown options adapter (`FormioRemoteOptionsAdapter`).
+  - Remote dropdown options loaded by HTTP GET for absolute `data.url` values, with an injectable `FormioRemoteOptionsAdapter` for authentication, relative URLs, and custom APIs.
   - File storage adapter (`FormioFileStorageAdapter`).
   - Vector signature pad capture with base64 PNG data URL export.
   - Subform schema resolver (`FormioSubformResolver`).

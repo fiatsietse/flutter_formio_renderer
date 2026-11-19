@@ -685,9 +685,10 @@ class _FormioSelectWidgetState extends State<_FormioSelectWidget> {
       final url = comp.rawJson['data']?['url']?.toString() ??
           comp.rawJson['url']?.toString() ??
           '';
-      final adapter = widget.ctx.manager.options.remoteOptionsAdapter;
+      final adapter = widget.ctx.manager.options.remoteOptionsAdapter ??
+          const FormioHttpRemoteOptionsAdapter();
 
-      if (adapter != null && url.isNotEmpty) {
+      if (url.isNotEmpty) {
         setState(() {
           _isLoading = true;
           _error = null;
@@ -699,6 +700,7 @@ class _FormioSelectWidgetState extends State<_FormioSelectWidget> {
               url: url,
               formData: widget.ctx.manager.dataTree.rawData,
               valueProperty: comp.rawJson['valueProperty']?.toString(),
+              template: comp.rawJson['template']?.toString(),
             ),
           );
           if (mounted) {
