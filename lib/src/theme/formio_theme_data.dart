@@ -8,10 +8,14 @@ class FormioThemeData {
   final TextStyle? labelStyle;
   final TextStyle? descriptionStyle;
   final TextStyle? errorStyle;
-  final InputDecorationTheme? inputDecorationTheme;
+
+  /// Flutter's decoration theme; its concrete type varies between SDK releases.
+  final Object? inputDecorationTheme;
   final ButtonStyle? primaryButtonStyle;
   final ButtonStyle? secondaryButtonStyle;
-  final CardTheme? cardTheme;
+
+  /// Flutter's card theme; its concrete type varies between SDK releases.
+  final Object? cardTheme;
   final double fieldSpacing;
   final double sectionSpacing;
 

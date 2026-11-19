@@ -1,3 +1,9 @@
+## 0.2.1
+
+* Fixed compatibility with newer Flutter theme data types.
+* Declared support for Android, iOS, Linux, macOS, Web, and Windows.
+* Expanded the `intl` constraint to include 0.20.x while preserving Dart 3.5 compatibility.
+
 ## 0.2.0
 
 * Added default HTTP GET loading for select components using `dataSrc: "url"`.
