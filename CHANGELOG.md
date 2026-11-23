@@ -1,3 +1,10 @@
+## 0.2.2
+
+* Fixed real-time localization updates so switching locales updates labels and options without resetting form data.
+* Fixed localized error summary banner (`fixErrorsBeforeSubmitting`) to honor the active locale.
+* Added bilingual (`en` / `fr`) `i18n` schemas across example fixtures.
+* Added `controller.setLocale()` for programmatic locale switching.
+
 ## 0.2.1
 
 * Fixed compatibility with newer Flutter theme data types.

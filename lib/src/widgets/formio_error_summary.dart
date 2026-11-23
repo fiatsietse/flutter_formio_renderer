@@ -6,11 +6,13 @@ import '../localization/formio_localizations.dart';
 class FormioErrorSummary extends StatelessWidget {
   final List<FormioValidationError> errors;
   final void Function(FormioValidationError error)? onErrorTap;
+  final Locale? locale;
 
   const FormioErrorSummary({
     super.key,
     required this.errors,
     this.onErrorTap,
+    this.locale,
   });
 
   @override
@@ -18,7 +20,8 @@ class FormioErrorSummary extends StatelessWidget {
     if (errors.isEmpty) return const SizedBox.shrink();
 
     final theme = Theme.of(context);
-    final strings = FormioLocalizations.forLocale(null).strings;
+    final effectiveLocale = locale ?? Localizations.maybeLocaleOf(context);
+    final strings = FormioLocalizations.forLocale(effectiveLocale).strings;
 
     return Semantics(
       liveRegion: true,

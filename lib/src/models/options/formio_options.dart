@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import '../diagnostics/formio_diagnostic.dart';
 import '../../scripting/script_evaluator.dart';
 import '../../adapters/remote_options_adapter.dart';
@@ -143,4 +143,37 @@ class FormioOptions {
       onDiagnostic: onDiagnostic ?? this.onDiagnostic,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is FormioOptions &&
+        other.clearOnHide == clearOnHide &&
+        other.strictMode == strictMode &&
+        other.validationTiming == validationTiming &&
+        other.maxLogicIterations == maxLogicIterations &&
+        other.scriptEvaluator == scriptEvaluator &&
+        other.remoteOptionsAdapter == remoteOptionsAdapter &&
+        other.fileStorageAdapter == fileStorageAdapter &&
+        other.subformResolver == subformResolver &&
+        other.locale == locale &&
+        mapEquals(other.i18n, i18n) &&
+        other.readOnly == readOnly &&
+        other.allowDraftExport == allowDraftExport;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        clearOnHide,
+        strictMode,
+        validationTiming,
+        maxLogicIterations,
+        scriptEvaluator,
+        remoteOptionsAdapter,
+        fileStorageAdapter,
+        subformResolver,
+        locale,
+        readOnly,
+        allowDraftExport,
+      );
 }

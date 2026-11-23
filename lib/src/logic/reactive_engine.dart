@@ -14,7 +14,8 @@ import 'dependency_graph.dart';
 /// logic rules, and dynamic properties in deterministic topological order with cycle safety.
 class FormioReactiveEngine {
   final FormioFormSchema schema;
-  final FormioOptions options;
+  FormioOptions _options;
+  FormioOptions get options => _options;
   final FormioDataTree dataTree;
   final Map<String, FormioComponentState> componentStates;
   final FormioDependencyGraph dependencyGraph;
@@ -22,11 +23,16 @@ class FormioReactiveEngine {
 
   FormioReactiveEngine({
     required this.schema,
-    required this.options,
+    required FormioOptions options,
     required this.dataTree,
     required this.componentStates,
     required this.dependencyGraph,
-  });
+  }) : _options = options;
+
+  /// Updates reactive options at runtime.
+  void updateOptions(FormioOptions newOptions) {
+    _options = newOptions;
+  }
 
   /// Evaluates all reactive logic rules, conditions, and calculations across the form.
   ///

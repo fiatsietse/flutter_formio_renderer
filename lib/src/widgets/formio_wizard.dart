@@ -71,7 +71,11 @@ class FormioWizard extends StatelessWidget {
         const SizedBox(height: 16),
 
         // 2. Error Summary Banner (if errors present on current page)
-        if (pageErrors.isNotEmpty) FormioErrorSummary(errors: pageErrors),
+        if (pageErrors.isNotEmpty)
+          FormioErrorSummary(
+            errors: pageErrors,
+            locale: manager.options.locale,
+          ),
 
         // 3. Current Active Page Components
         _buildPageContent(context, currentPage),

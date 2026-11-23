@@ -75,7 +75,35 @@ class ExampleFixtures {
       "label": "Register",
       "action": "submit"
     }
-  ]
+  ],
+  "i18n": {
+    "en": {
+      "User Registration": "User Registration",
+      "First Name": "First Name",
+      "Last Name": "Last Name",
+      "Email Address": "Email Address",
+      "Password": "Password",
+      "Phone Number": "Phone Number",
+      "I agree to the Terms of Service": "I agree to the Terms of Service",
+      "Register": "Register",
+      "Enter first name": "Enter first name",
+      "Enter last name": "Enter last name",
+      "Enter password": "Enter password"
+    },
+    "fr": {
+      "User Registration": "Inscription Utilisateur",
+      "First Name": "Prénom",
+      "Last Name": "Nom de famille",
+      "Email Address": "Adresse e-mail",
+      "Password": "Mot de passe",
+      "Phone Number": "Numéro de téléphone",
+      "I agree to the Terms of Service": "J'accepte les conditions d'utilisation",
+      "Register": "S'inscrire",
+      "Enter first name": "Entrez votre prénom",
+      "Enter last name": "Entrez votre nom",
+      "Enter password": "Entrez votre mot de passe"
+    }
+  }
 }
 
 ''';
@@ -151,7 +179,31 @@ class ExampleFixtures {
         }
       ]
     }
-  ]
+  ],
+  "i18n": {
+    "en": {
+      "Personal Details": "Personal Details",
+      "Full Name": "Full Name",
+      "Do you have a spouse?": "Do you have a spouse?",
+      "Spouse Details": "Spouse Details",
+      "Spouse Name": "Spouse Name",
+      "Spouse Occupation": "Spouse Occupation",
+      "Confirmation": "Confirmation",
+      "Additional Notes": "Additional Notes",
+      "Confirm Application": "Confirm Application"
+    },
+    "fr": {
+      "Personal Details": "Informations personnelles",
+      "Full Name": "Nom complet",
+      "Do you have a spouse?": "Êtes-vous marié(e) ?",
+      "Spouse Details": "Informations du conjoint",
+      "Spouse Name": "Nom du conjoint",
+      "Spouse Occupation": "Profession du conjoint",
+      "Confirmation": "Confirmation",
+      "Additional Notes": "Remarques additionnelles",
+      "Confirm Application": "Confirmer la demande"
+    }
+  }
 }
 
 ''';
@@ -296,7 +348,29 @@ class ExampleFixtures {
         ]
       }
     }
-  ]
+  ],
+  "i18n": {
+    "en": {
+      "Invoice Items": "Invoice Items",
+      "Description": "Description",
+      "Quantity": "Quantity",
+      "Unit Price": "Unit Price",
+      "Line Total": "Line Total",
+      "Discount": "Discount",
+      "Shipping Fee": "Shipping Fee",
+      "Final Total": "Final Total"
+    },
+    "fr": {
+      "Invoice Items": "Lignes de facturation",
+      "Description": "Désignation",
+      "Quantity": "Quantité",
+      "Unit Price": "Prix unitaire",
+      "Line Total": "Sous-total ligne",
+      "Discount": "Remise",
+      "Shipping Fee": "Frais de livraison",
+      "Final Total": "Total final"
+    }
+  }
 }
 
 ''';
@@ -337,7 +411,25 @@ class ExampleFixtures {
         "required": true
       }
     }
-  ]
+  ],
+  "i18n": {
+    "en": {
+      "Dependent Locations": "Dependent Locations",
+      "Country": "Country",
+      "City": "City",
+      "United States": "United States",
+      "Canada": "Canada",
+      "France": "France"
+    },
+    "fr": {
+      "Dependent Locations": "Emplacements géographiques",
+      "Country": "Pays",
+      "City": "Ville",
+      "United States": "États-Unis",
+      "Canada": "Canada",
+      "France": "France"
+    }
+  }
 }
 
 ''';
@@ -487,7 +579,19 @@ class ExampleFixtures {
         "required": true
       }
     }
-  ]
+  ],
+  "i18n": {
+    "en": {
+      "Document Attachments": "Document Attachments",
+      "Signature": "Signature",
+      "Signer Full Name": "Signer Full Name"
+    },
+    "fr": {
+      "Document Attachments": "Pièces jointes",
+      "Signature": "Signature électronique",
+      "Signer Full Name": "Nom complet du signataire"
+    }
+  }
 }
 
 ''';

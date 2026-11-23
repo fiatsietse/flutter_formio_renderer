@@ -32,6 +32,12 @@ class FormioComponentState with ChangeNotifier {
   /// Dynamic display label (can be overridden by logic rules).
   String _label;
 
+  /// Dynamic description text.
+  String? _description;
+
+  /// Dynamic tooltip text.
+  String? _tooltip;
+
   /// Validation errors currently attached to this component instance.
   List<FormioValidationError> _errors = const [];
 
@@ -49,12 +55,16 @@ class FormioComponentState with ChangeNotifier {
   })  : _hidden = schema.hidden,
         _disabled = schema.disabled,
         _required = schema.validate.required,
-        _label = schema.label;
+        _label = schema.label,
+        _description = schema.description,
+        _tooltip = schema.tooltip;
 
   bool get hidden => _hidden;
   bool get disabled => _disabled;
   bool get required => _required;
   String get label => _label;
+  String? get description => _description;
+  String? get tooltip => _tooltip;
   List<FormioValidationError> get errors => _errors;
   bool get hasErrors => _errors.isNotEmpty;
   bool get isTouched => _isTouched;
@@ -88,6 +98,22 @@ class FormioComponentState with ChangeNotifier {
   bool setLabel(String value) {
     if (_label == value) return false;
     _label = value;
+    notifyListeners();
+    return true;
+  }
+
+  /// Updates description. Returns true if changed.
+  bool setDescription(String? value) {
+    if (_description == value) return false;
+    _description = value;
+    notifyListeners();
+    return true;
+  }
+
+  /// Updates tooltip. Returns true if changed.
+  bool setTooltip(String? value) {
+    if (_tooltip == value) return false;
+    _tooltip = value;
     notifyListeners();
     return true;
   }

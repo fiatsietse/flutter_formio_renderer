@@ -27,6 +27,8 @@ class FormioFieldWrapper extends StatelessWidget {
     final label = state.label;
     final isRequired = state.required;
     final hasErrors = state.hasErrors;
+    final tooltipText = state.tooltip ?? comp.tooltip;
+    final descriptionText = state.description ?? comp.description;
 
     return Padding(
       padding: EdgeInsets.only(bottom: theme.fieldSpacing),
@@ -59,10 +61,10 @@ class FormioFieldWrapper extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (comp.tooltip != null && comp.tooltip!.isNotEmpty) ...[
+                if (tooltipText != null && tooltipText.isNotEmpty) ...[
                   const SizedBox(width: 6),
                   Tooltip(
-                    message: comp.tooltip!,
+                    message: tooltipText,
                     child: Icon(
                       Icons.info_outline,
                       size: 16,
@@ -75,10 +77,10 @@ class FormioFieldWrapper extends StatelessWidget {
             const SizedBox(height: 6),
           ],
           child,
-          if (comp.description != null && comp.description!.isNotEmpty) ...[
+          if (descriptionText != null && descriptionText.isNotEmpty) ...[
             const SizedBox(height: 4),
             Text(
-              comp.description!,
+              descriptionText,
               style: theme.descriptionStyle ??
                   Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,

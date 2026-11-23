@@ -70,6 +70,16 @@ class _FormioShowcaseScreenState extends State<FormioShowcaseScreen> {
     return null;
   }
 
+  void _handleDiagnostic(FormioDiagnostic d) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _diagnostics.add(d);
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final schemaJson = ExampleFixtures.all[_selectedFixtureKey] ??
@@ -81,15 +91,7 @@ class _FormioShowcaseScreenState extends State<FormioShowcaseScreen> {
       locale: Locale(_language),
       remoteOptionsAdapter: _remoteAdapter,
       fileStorageAdapter: _fileAdapter,
-      onDiagnostic: (d) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) {
-            setState(() {
-              _diagnostics.add(d);
-            });
-          }
-        });
-      },
+      onDiagnostic: _handleDiagnostic,
     );
 
     return Scaffold(
@@ -216,8 +218,7 @@ class _FormioShowcaseScreenState extends State<FormioShowcaseScreen> {
 
                   // The FormioForm Widget!
                   FormioForm(
-                    key: ValueKey(
-                        '${_selectedFixtureKey}_${_language}_$_readOnly'),
+                    key: ValueKey(_selectedFixtureKey),
                     schema: schemaJson,
                     controller: _controller,
                     initialData: initialData,

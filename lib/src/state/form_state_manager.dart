@@ -15,7 +15,8 @@ import 'data_tree.dart';
 /// reactive logic, validation, and wizard navigation.
 class FormioStateManager with ChangeNotifier {
   final FormioFormSchema schema;
-  final FormioOptions options;
+  FormioOptions _options;
+  FormioOptions get options => _options;
   final FormioDataTree dataTree;
   final Map<String, FormioComponentState> componentStates = {};
   final FormioComponentValidator validator = const FormioComponentValidator();
@@ -34,12 +35,12 @@ class FormioStateManager with ChangeNotifier {
     required this.schema,
     FormioOptions options = FormioOptions.defaults,
     Map<String, dynamic>? initialData,
-  })  : options = _resolveOptions(schema, options),
+  })  : _options = _resolveOptions(schema, options),
         dataTree = FormioDataTree(initialData) {
     dependencyGraph = FormioDependencyGraph.fromSchema(schema);
     reactiveEngine = FormioReactiveEngine(
       schema: schema,
-      options: this.options,
+      options: _options,
       dataTree: dataTree,
       componentStates: componentStates,
       dependencyGraph: dependencyGraph,
@@ -99,6 +100,38 @@ class FormioStateManager with ChangeNotifier {
         : null;
     return options.translate(key,
         schemaI18n: schemaI18n, defaultText: defaultText);
+  }
+
+  /// Updates options (e.g. locale or readOnly) at runtime while preserving existing data and state.
+  void updateOptions(FormioOptions newOptions) {
+    final resolved = _resolveOptions(schema, newOptions);
+    if (_options == resolved) return;
+    final localeChanged = _options.locale != resolved.locale;
+    _options = resolved;
+    reactiveEngine.updateOptions(_options);
+    if (localeChanged) {
+      _retranslateComponentLabels();
+      if (componentStates.values.any((s) => s.hasErrors)) {
+        validate(onlyCurrentPage: schema.isWizard);
+      }
+    }
+    notifyListeners();
+  }
+
+  /// Re-evaluates translations for all component labels upon locale change.
+  void _retranslateComponentLabels() {
+    for (final state in componentStates.values) {
+      final comp = state.schema;
+      if (comp.label.isNotEmpty) {
+        state.setLabel(translate(comp.label));
+      }
+      if (comp.description != null && comp.description!.isNotEmpty) {
+        state.setDescription(translate(comp.description!));
+      }
+      if (comp.tooltip != null && comp.tooltip!.isNotEmpty) {
+        state.setTooltip(translate(comp.tooltip!));
+      }
+    }
   }
 
   /// Retrieves runtime state for a component by key or path.
@@ -364,6 +397,18 @@ class FormioStateManager with ChangeNotifier {
           state.setLabel(translatedLabel);
         }
       }
+      if (comp.description != null && comp.description!.isNotEmpty) {
+        final translated = translate(comp.description!);
+        if (translated != comp.description) {
+          state.setDescription(translated);
+        }
+      }
+      if (comp.tooltip != null && comp.tooltip!.isNotEmpty) {
+        final translated = translate(comp.tooltip!);
+        if (translated != comp.tooltip) {
+          state.setTooltip(translated);
+        }
+      }
       componentStates[instanceId] = state;
 
       // If repeating group, initialize rows already in dataTree
@@ -385,6 +430,18 @@ class FormioStateManager with ChangeNotifier {
                 final translatedLabel = translate(col.label);
                 if (translatedLabel != col.label) {
                   colState.setLabel(translatedLabel);
+                }
+              }
+              if (col.description != null && col.description!.isNotEmpty) {
+                final translated = translate(col.description!);
+                if (translated != col.description) {
+                  colState.setDescription(translated);
+                }
+              }
+              if (col.tooltip != null && col.tooltip!.isNotEmpty) {
+                final translated = translate(col.tooltip!);
+                if (translated != col.tooltip) {
+                  colState.setTooltip(translated);
                 }
               }
               componentStates[instanceId] = colState;

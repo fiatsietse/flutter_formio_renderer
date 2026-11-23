@@ -17,7 +17,8 @@ Widget buildPanel(FormioRenderContext ctx) {
 Widget buildFieldset(FormioRenderContext ctx) {
   final comp = ctx.state.schema;
   if (ctx.state.hidden) return const SizedBox.shrink();
-  final legend = comp.rawJson['legend']?.toString() ?? comp.label;
+  final rawLegend = comp.rawJson['legend']?.toString() ?? comp.label;
+  final legend = ctx.manager.translate(rawLegend);
 
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -138,7 +139,9 @@ Widget buildTabs(FormioRenderContext ctx) {
           unselectedLabelColor: Colors.grey,
           tabs: [
             for (final tab in tabComponents)
-              Tab(text: tab.label.isNotEmpty ? tab.label : tab.key),
+              Tab(
+                  text: ctx.manager.translate(
+                      tab.label.isNotEmpty ? tab.label : tab.key)),
           ],
         ),
         const SizedBox(height: 12),
@@ -234,7 +237,9 @@ class _FormioPanelWidgetState extends State<_FormioPanelWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.comp.rawJson['title']?.toString() ?? widget.comp.label;
+    final rawTitle =
+        widget.comp.rawJson['title']?.toString() ?? widget.comp.label;
+    final title = widget.ctx.manager.translate(rawTitle);
     final collapsible = widget.comp.rawJson['collapsible'] == true;
 
     return Card(

@@ -19,7 +19,9 @@ Widget buildTextField(FormioRenderContext ctx) {
     state: ctx.state,
     child: _FormioTextInput(
       initialValue: ctx.value?.toString() ?? '',
-      placeholder: comp.placeholder,
+      placeholder: comp.placeholder != null
+          ? ctx.manager.translate(comp.placeholder!)
+          : null,
       prefix: comp.prefix,
       suffix: comp.suffix,
       readOnly: isReadOnly,
@@ -39,7 +41,9 @@ Widget buildTextArea(FormioRenderContext ctx) {
     state: ctx.state,
     child: _FormioTextInput(
       initialValue: ctx.value?.toString() ?? '',
-      placeholder: comp.placeholder,
+      placeholder: comp.placeholder != null
+          ? ctx.manager.translate(comp.placeholder!)
+          : null,
       readOnly: isReadOnly,
       maxLines: rows > 1 ? rows : 3,
       minLines: rows > 1 ? rows : 2,
@@ -58,7 +62,9 @@ Widget buildNumber(FormioRenderContext ctx) {
     state: ctx.state,
     child: _FormioTextInput(
       initialValue: ctx.value?.toString() ?? '',
-      placeholder: comp.placeholder,
+      placeholder: comp.placeholder != null
+          ? ctx.manager.translate(comp.placeholder!)
+          : null,
       prefix: comp.prefix,
       suffix: comp.suffix,
       readOnly: isReadOnly,
@@ -85,7 +91,9 @@ Widget buildPassword(FormioRenderContext ctx) {
     state: ctx.state,
     child: _FormioPasswordInput(
       initialValue: ctx.value?.toString() ?? '',
-      placeholder: comp.placeholder,
+      placeholder: comp.placeholder != null
+          ? ctx.manager.translate(comp.placeholder!)
+          : null,
       prefix: comp.prefix,
       readOnly: isReadOnly,
       onChanged: (val) => ctx.setValue(val),
@@ -102,7 +110,9 @@ Widget buildEmail(FormioRenderContext ctx) {
     state: ctx.state,
     child: _FormioTextInput(
       initialValue: ctx.value?.toString() ?? '',
-      placeholder: comp.placeholder ?? 'name@example.com',
+      placeholder: comp.placeholder != null
+          ? ctx.manager.translate(comp.placeholder!)
+          : 'name@example.com',
       prefix: comp.prefix,
       suffix: comp.suffix,
       readOnly: isReadOnly,
@@ -121,7 +131,9 @@ Widget buildUrl(FormioRenderContext ctx) {
     state: ctx.state,
     child: _FormioTextInput(
       initialValue: ctx.value?.toString() ?? '',
-      placeholder: comp.placeholder ?? 'https://example.com',
+      placeholder: comp.placeholder != null
+          ? ctx.manager.translate(comp.placeholder!)
+          : 'https://example.com',
       prefix: comp.prefix,
       suffix: comp.suffix,
       readOnly: isReadOnly,
@@ -140,7 +152,9 @@ Widget buildPhoneNumber(FormioRenderContext ctx) {
     state: ctx.state,
     child: _FormioTextInput(
       initialValue: ctx.value?.toString() ?? '',
-      placeholder: comp.placeholder,
+      placeholder: comp.placeholder != null
+          ? ctx.manager.translate(comp.placeholder!)
+          : null,
       prefix: comp.prefix,
       suffix: comp.suffix,
       readOnly: isReadOnly,
@@ -512,7 +526,9 @@ Widget buildButton(FormioRenderContext ctx) {
                   break;
               }
             },
-      child: Text(comp.label.isNotEmpty ? comp.label : 'Submit'),
+      child: Text(ctx.state.label.isNotEmpty
+          ? ctx.state.label
+          : ctx.manager.translate('Submit')),
     ),
   );
 }

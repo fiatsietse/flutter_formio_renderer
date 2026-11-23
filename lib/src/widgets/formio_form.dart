@@ -130,6 +130,10 @@ class _FormioFormState extends State<FormioForm> {
       _manager.removeListener(_handleStateChange);
       oldWidget.controller?.detach();
       _initForm();
+    } else if (oldWidget.options != widget.options ||
+        oldWidget.readOnly != widget.readOnly) {
+      final effectiveOptions = widget.options.copyWith(readOnly: widget.readOnly);
+      _manager.updateOptions(effectiveOptions);
     }
   }
 
@@ -181,6 +185,7 @@ class _FormioFormState extends State<FormioForm> {
         if (allErrors.isNotEmpty)
           FormioErrorSummary(
             errors: allErrors,
+            locale: _manager.options.locale,
             onErrorTap: (err) {
               // Focus or scroll to field if possible
             },

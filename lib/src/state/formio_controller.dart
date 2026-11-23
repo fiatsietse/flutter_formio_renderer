@@ -1,7 +1,9 @@
+import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import '../models/submission/data_path.dart';
 import '../models/submission/formio_submission.dart';
 import '../models/validation/validation_result.dart';
+import '../models/options/formio_options.dart';
 import 'form_state_manager.dart';
 
 /// Public controller to programmatically inspect, update, validate,
@@ -76,6 +78,16 @@ class FormioController with ChangeNotifier {
   /// Maps backend or server-returned validation errors back onto form fields.
   void setServerErrors(Map<String, String> errors) {
     _requireManager.setServerErrors(errors);
+  }
+
+  /// Dynamically updates the form locale in real-time while preserving form data.
+  void setLocale(Locale locale) {
+    _requireManager.updateOptions(_requireManager.options.copyWith(locale: locale));
+  }
+
+  /// Dynamically updates runtime form options (e.g. locale, readOnly) while preserving form data.
+  void updateOptions(FormioOptions options) {
+    _requireManager.updateOptions(options);
   }
 
   // --- Wizard Navigation ---
