@@ -60,6 +60,12 @@ class FormioController with ChangeNotifier {
     return _requireManager.validate(onlyCurrentPage: onlyCurrentPage);
   }
 
+  /// Validates the whole form and, when valid, calls the form's `onSubmit`
+  /// with the submission (or `onError` when invalid). Returns the result.
+  FormioValidationResult submit() {
+    return _requireManager.submit();
+  }
+
   /// Resets the form to its initial default state.
   void reset() {
     _requireManager.reset();
@@ -82,7 +88,8 @@ class FormioController with ChangeNotifier {
 
   /// Dynamically updates the form locale in real-time while preserving form data.
   void setLocale(Locale locale) {
-    _requireManager.updateOptions(_requireManager.options.copyWith(locale: locale));
+    _requireManager
+        .updateOptions(_requireManager.options.copyWith(locale: locale));
   }
 
   /// Dynamically updates runtime form options (e.g. locale, readOnly) while preserving form data.

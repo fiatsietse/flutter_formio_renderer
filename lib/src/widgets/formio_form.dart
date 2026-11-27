@@ -14,6 +14,7 @@ import '../theme/formio_theme_data.dart';
 import '../components/default_components.dart';
 import 'formio_wizard.dart';
 import 'formio_error_summary.dart';
+import 'formio_form_scope.dart';
 
 /// Top-level widget that renders a Form.io JSON schema as native Flutter widgets.
 ///
@@ -110,11 +111,20 @@ class _FormioFormState extends State<FormioForm> {
       initialData: widget.initialData,
     );
 
+    _wireCallbacks();
+
     // 5. Attach controller if provided
     widget.controller?.attach(_manager);
 
     // 6. Listen for changes
     _manager.addListener(_handleStateChange);
+  }
+
+  /// Routes submit buttons inside the schema (via [FormioStateManager.submit])
+  /// to this widget's [FormioForm.onSubmit] and [FormioForm.onError].
+  void _wireCallbacks() {
+    _manager.onSubmit = widget.onSubmit;
+    _manager.onError = widget.onError;
   }
 
   void _handleStateChange() {
@@ -130,10 +140,14 @@ class _FormioFormState extends State<FormioForm> {
       _manager.removeListener(_handleStateChange);
       oldWidget.controller?.detach();
       _initForm();
-    } else if (oldWidget.options != widget.options ||
-        oldWidget.readOnly != widget.readOnly) {
-      final effectiveOptions = widget.options.copyWith(readOnly: widget.readOnly);
-      _manager.updateOptions(effectiveOptions);
+    } else {
+      _wireCallbacks();
+      if (oldWidget.options != widget.options ||
+          oldWidget.readOnly != widget.readOnly) {
+        final effectiveOptions =
+            widget.options.copyWith(readOnly: widget.readOnly);
+        _manager.updateOptions(effectiveOptions);
+      }
     }
   }
 
@@ -168,7 +182,7 @@ class _FormioFormState extends State<FormioForm> {
 
     return FormioTheme(
       data: effectiveTheme,
-      child: content,
+      child: FormioFormScope(manager: _manager, child: content),
     );
   }
 

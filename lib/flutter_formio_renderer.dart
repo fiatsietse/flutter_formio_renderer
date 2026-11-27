@@ -60,6 +60,7 @@ export 'src/theme/formio_theme_data.dart';
 export 'src/widgets/formio_form.dart';
 export 'src/widgets/formio_wizard.dart';
 export 'src/widgets/formio_field_wrapper.dart';
+export 'src/widgets/formio_form_scope.dart';
 export 'src/widgets/formio_error_summary.dart';
 export 'src/widgets/formio_unsupported_widget.dart';
 export 'src/widgets/html_renderer.dart';

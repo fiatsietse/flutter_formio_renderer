@@ -507,10 +507,7 @@ Widget buildButton(FormioRenderContext ctx) {
           : () {
               switch (action) {
                 case 'submit':
-                  final res = ctx.manager.validate();
-                  if (res.isValid) {
-                    // Trigger submission callback via form
-                  }
+                  ctx.manager.submit();
                   break;
                 case 'reset':
                   ctx.manager.reset();
