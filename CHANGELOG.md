@@ -1,3 +1,11 @@
+## Unreleased
+
+* Fixed submit buttons (`"action": "submit"`) on non-wizard forms not calling `FormioForm.onSubmit`; invalid submits now call `onError` (#1).
+* Added `FormioStateManager.submit()` and `FormioController.submit()`.
+* `ValidationTiming.onChange` now validates only fields the user has touched, so required errors no longer appear on fields not yet reached (#2). After a submit attempt every field counts as touched.
+* Implemented `ValidationTiming.onBlur`: a field is validated when it loses focus, and an existing error clears as soon as the value is fixed (#3).
+* Added `FormioFormScope`, which gives descendant widgets access to the form's state manager.
+
 ## 0.2.2
 
 * Fixed real-time localization updates so switching locales updates labels and options without resetting form data.

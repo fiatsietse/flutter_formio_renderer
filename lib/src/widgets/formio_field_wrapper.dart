@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../state/component_state.dart';
 import '../theme/formio_theme.dart';
+import 'formio_form_scope.dart';
 
 /// Wraps input fields with standard label, required asterisk, description,
 /// tooltip icon, and validation error messages.
@@ -15,6 +16,21 @@ class FormioFieldWrapper extends StatelessWidget {
     required this.child,
     this.showLabel = true,
   });
+
+  /// Tells the form's state manager when focus leaves the input, so
+  /// blur-time validation can run.
+  Widget _withBlurReporting(BuildContext context, Widget input) {
+    final manager = FormioFormScope.maybeOf(context);
+    if (manager == null) return input;
+    return Focus(
+      canRequestFocus: false,
+      skipTraversal: true,
+      onFocusChange: (hasFocus) {
+        if (!hasFocus) manager.blur(state);
+      },
+      child: input,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +92,7 @@ class FormioFieldWrapper extends StatelessWidget {
             ),
             const SizedBox(height: 6),
           ],
-          child,
+          _withBlurReporting(context, child),
           if (descriptionText != null && descriptionText.isNotEmpty) ...[
             const SizedBox(height: 4),
             Text(

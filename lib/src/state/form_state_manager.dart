@@ -31,6 +31,15 @@ class FormioStateManager with ChangeNotifier {
   // Form submission lifecycle state
   bool _isSubmitting = false;
 
+  /// Called by [submit] with the exported submission when the form is valid.
+  ///
+  /// [FormioForm] wires this to its own `onSubmit`, so submit buttons inside
+  /// the schema reach the host app.
+  void Function(FormioSubmission submission)? onSubmit;
+
+  /// Called by [submit] with the validation result when the form is invalid.
+  void Function(FormioValidationResult result)? onError;
+
   FormioStateManager({
     required this.schema,
     FormioOptions options = FormioOptions.defaults,
@@ -112,7 +121,7 @@ class FormioStateManager with ChangeNotifier {
     if (localeChanged) {
       _retranslateComponentLabels();
       if (componentStates.values.any((s) => s.hasErrors)) {
-        validate(onlyCurrentPage: schema.isWizard);
+        _validateTouched();
       }
     }
     notifyListeners();
@@ -141,18 +150,72 @@ class FormioStateManager with ChangeNotifier {
   dynamic getValue(DataPath path) => dataTree.getValue(path);
 
   /// Sets value at [path] and triggers reactive re-evaluation.
+  ///
+  /// The component at [path] is marked touched. With
+  /// [ValidationTiming.onChange], only touched components are re-validated,
+  /// so fields the user has not reached yet do not show errors. With
+  /// [ValidationTiming.onBlur], a field that already shows errors is
+  /// re-validated so the errors clear as soon as the value is fixed.
   void setValue(DataPath path, dynamic value) {
     final changed = dataTree.setValue(path, value);
     if (changed) {
+      for (final state in componentStates.values) {
+        if (state.dataPath == path) state.markTouched();
+      }
       reactiveEngine.evaluateAll();
       if (schema.isWizard) {
         _adjustCurrentPageIfHidden();
       }
-      if (options.validationTiming == ValidationTiming.onChange) {
-        validate(onlyCurrentPage: schema.isWizard);
+      switch (options.validationTiming) {
+        case ValidationTiming.onChange:
+          _validateTouched();
+          break;
+        case ValidationTiming.onBlur:
+          if (componentStates.values.any((s) => s.hasErrors)) {
+            _validateTouched();
+          }
+          break;
+        case ValidationTiming.onStep:
+        case ValidationTiming.onSubmit:
+          break;
       }
       notifyListeners();
     }
+  }
+
+  /// Reports that the input for [state] lost focus.
+  ///
+  /// Marks the component touched and, with [ValidationTiming.onBlur] or
+  /// [ValidationTiming.onChange], validates the touched components.
+  void blur(FormioComponentState state) {
+    state.markTouched();
+    if (options.validationTiming == ValidationTiming.onBlur ||
+        options.validationTiming == ValidationTiming.onChange) {
+      _validateTouched();
+      notifyListeners();
+    }
+  }
+
+  /// Validates the whole form and, when valid, calls [onSubmit] with the
+  /// exported submission. When invalid, calls [onError].
+  ///
+  /// Returns the validation result. Does nothing while a submission is
+  /// already in progress.
+  FormioValidationResult submit() {
+    if (_isSubmitting) return FormioValidationResult.valid;
+    final result = validate();
+    if (result.isValid) {
+      setSubmitting(true);
+      try {
+        onSubmit?.call(exportSubmission(isDraft: false));
+      } finally {
+        setSubmitting(false);
+      }
+    } else {
+      onError?.call(result);
+      notifyListeners();
+    }
+    return result;
   }
 
   /// Bulk updates multiple values.
@@ -247,7 +310,23 @@ class FormioStateManager with ChangeNotifier {
 
   /// Validates the form.
   /// If [onlyCurrentPage] is true, checks only components on [currentPageIndex].
+  ///
+  /// Every validated component is marked touched, so later value changes
+  /// keep its errors up to date.
   FormioValidationResult validate({bool onlyCurrentPage = false}) {
+    return _validate(onlyCurrentPage: onlyCurrentPage, onlyTouched: false);
+  }
+
+  /// Validates only the components the user has touched (on the current
+  /// page for wizards), leaving untouched fields free of errors.
+  FormioValidationResult _validateTouched() {
+    return _validate(onlyCurrentPage: schema.isWizard, onlyTouched: true);
+  }
+
+  FormioValidationResult _validate({
+    required bool onlyCurrentPage,
+    required bool onlyTouched,
+  }) {
     final allErrors = <FormioValidationError>[];
 
     for (final state in componentStates.values) {
@@ -256,6 +335,11 @@ class FormioStateManager with ChangeNotifier {
       }
       if (state.schema.isDisplayOnly || state.schema.isLayoutComponent) {
         continue;
+      }
+      if (onlyTouched) {
+        if (!state.isTouched) continue;
+      } else {
+        state.markTouched();
       }
 
       final val = dataTree.getValue(state.dataPath);
