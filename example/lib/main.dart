@@ -36,6 +36,7 @@ class _FormioShowcaseScreenState extends State<FormioShowcaseScreen> {
   bool _readOnly = false;
   bool _strictMode = false;
   String _language = 'en';
+  ValidationTiming _validationTiming = ValidationTiming.onChange;
 
   final FormioController _controller = FormioController();
   Map<String, dynamic> _liveData = {};
@@ -88,6 +89,7 @@ class _FormioShowcaseScreenState extends State<FormioShowcaseScreen> {
 
     final options = FormioOptions(
       strictMode: _strictMode,
+      validationTiming: _validationTiming,
       locale: Locale(_language),
       remoteOptionsAdapter: _remoteAdapter,
       fileStorageAdapter: _fileAdapter,
@@ -98,6 +100,27 @@ class _FormioShowcaseScreenState extends State<FormioShowcaseScreen> {
       appBar: AppBar(
         title: const Text('Flutter Form.io Renderer'),
         actions: [
+          // Validation Timing Switcher
+          const Text('Validate: ', style: TextStyle(fontSize: 12)),
+          DropdownButton<ValidationTiming>(
+            value: _validationTiming,
+            underline: const SizedBox.shrink(),
+            items: [
+              for (final t in ValidationTiming.values)
+                DropdownMenuItem(value: t, child: Text(t.name)),
+            ],
+            onChanged: (val) {
+              if (val != null) {
+                setState(() {
+                  _validationTiming = val;
+                  _liveData = {};
+                  _lastValidationResult = null;
+                  _lastSubmissionJson = null;
+                });
+              }
+            },
+          ),
+          const SizedBox(width: 8),
           // Locale Switcher
           DropdownButton<String>(
             value: _language,
@@ -218,7 +241,7 @@ class _FormioShowcaseScreenState extends State<FormioShowcaseScreen> {
 
                   // The FormioForm Widget!
                   FormioForm(
-                    key: ValueKey(_selectedFixtureKey),
+                    key: ValueKey('$_selectedFixtureKey/$_validationTiming'),
                     schema: schemaJson,
                     controller: _controller,
                     initialData: initialData,
